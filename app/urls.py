@@ -5,5 +5,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('brands.urls')),
+    path('', include('categories.urls')),
     path('', views.HomeView.as_view(), name='home'),
 ]

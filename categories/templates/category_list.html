@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Lista de Categorias{% endblock %}
+{% block content %}
+<h1>Categorias</h1>
+<a href="{% url 'category_create' %}" class="btn btn-primary mb-3">Nova Categoria</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in categories %}
+        <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.description|default:"—" }}</td>
+            <td>
+                <a href="{% url 'category_detail' category.pk %}" class="btn btn-sm btn-info">View</a>
+                <a href="{% url 'category_update' category.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'category_delete' category.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
