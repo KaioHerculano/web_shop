@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Detalhes da Marca{% endblock %}
+{% block content %}
+<h1>{{ object.name }}</h1>
+<p><strong>Description:</strong> {{ object.description|default:"No description." }}</p>
+
+<a href="{% url 'brand_update' object.pk %}" class="btn btn-warning">Editar</a>
+<a href="{% url 'brand_delete' object.pk %}" class="btn btn-danger">Deletar</a>
+<a href="{% url 'brand_list' %}" class="btn btn-secondary">Cancelar e Voltar</a>
+{% endblock %}
