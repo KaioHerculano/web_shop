@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>{{ product.title }}</h2>
+        </div>
+        <div class="card-body">
+            {% if product.photo %}
+                <div class="mb-4">
+                    <img src="{{ product.photo.url }}" 
+                        alt="Foto de {{ product.title }}"
+                        class="img-thumbnail"
+                        style="max-width: 400px;">
+                </div>
+            {% else %}
+                <div class="alert alert-warning">Sem imagem cadastrada</div>
+            {% endif %}
+
+            <p class="card-text">Preço: R$ {{ product.selling_price }}</p>
+            <p class="card-text">Estoque: {{ product.quantity }}</p>
+            <p class="card-text">Descrição: {{ product.description }}</p>
+            <a href="{% url 'product_list' %}" class="btn btn-secondary">Voltar</a>
+            <a href="{% url 'product_update' product.pk %}" class="btn btn-primary">Editar</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

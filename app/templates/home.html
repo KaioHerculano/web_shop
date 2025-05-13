@@ -1,13 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>WEB SHOPPING</title>
-</head>
-<body>
-    <h1>Bem Vindo ao Web Shopping</h1>
-</body>
-</html>
+<div class="container mt-5">
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 shadow">
+                {% if product.photo %}
+                <img src="{{ product.photo.url }}" 
+                     class="card-img-top product-image" 
+                     alt="{{ product.title }}"
+                     style="height: 200px; object-fit: contain;">
+                {% else %}
+                <div class="text-center py-5 bg-body">
+                    <i class="bi bi-image fs-1 text-muted"></i>
+                </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.title }}</h5>
+                    <p class="card-text text-success fw-bold">
+                        R$ {{ product.selling_price|floatformat:2 }}
+                    </p>
+                </div>
+                
+                <div class="card-footer bg-white">
+                    <a href="{% url 'product_detail' product.pk %}" 
+                       class="btn btn-outline-primary w-100">
+                        Ver Detalhes
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning text-center">
+                Nenhum produto disponível no momento
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
