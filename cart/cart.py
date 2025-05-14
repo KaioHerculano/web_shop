@@ -1,5 +1,4 @@
-# cart/cart.py
-from products.models import Product  # ajuste conforme sua app
+from products.models import Product
 
 class Cart:
     def __init__(self, request):
