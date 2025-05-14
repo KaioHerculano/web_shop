@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-4">
     <h1>Confirmar Exclusão</h1>
-    <p>Tem certeza que deseja excluir o produto "{{ product.name }}"?</p>
+    <p>Tem certeza que deseja excluir o produto "{{ product.title }}"?</p>
     <form method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
