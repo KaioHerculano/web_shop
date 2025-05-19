@@ -1,52 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+<div class="container mt-3 mt-md-5">  <!-- Margem menor em mobile -->
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">  <!-- 2 cards por linha em mobile -->
         {% for product in products %}
         <div class="col">
-            <div class="card h-100 shadow">
-                
+            <div class="card h-100 shadow" style="background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px);">
                 {% if product.photo %}
                 <img src="{{ product.photo.url }}" 
                      class="card-img-top product-image" 
-                     alt="{{ product.title }}"
-                     style="height: 200px; object-fit: contain;">
+                     alt="{{ product.title }}" 
+                     style="height: 120px; height: 200px; object-fit: contain;">  <!-- Altura menor em mobile -->
                 {% else %}
-                <div class="text-center py-5 bg-body">
+                <div class="text-center py-3 py-md-5 bg-body-secondary">  <!-- Padding menor em mobile -->
                     <i class="bi bi-image fs-1 text-muted"></i>
                 </div>
                 {% endif %}
 
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.title }}</h5>
-                    <p class="card-text text-success fw-bold">
-                        R$ {{ product.selling_price|floatformat:2 }}
-                    </p>
+                <div class="card-body p-2 p-md-3" style="background-color: rgba(255, 255, 255, 0.4);">  <!-- Padding ajustável -->
+                    <h5 class="card-title fs-6 fs-md-5">{{ product.title|truncatechars:30 }}</h5>  <!-- Fonte menor e texto truncado -->
+                    <p class="card-text text-success fw-bold mb-1 mb-md-2">R$ {{ product.selling_price|floatformat:2 }}</p>
                 </div>
 
-                <div class="card-footer bg-white">
+                <div class="card-footer p-2 p-md-3" style="background-color: rgba(255, 255, 255, 0.7);">
                     <a href="{% url 'product_detail' product.pk %}" 
-                       class="btn btn-outline-primary w-100 mb-2">
+                       class="btn btn-outline-primary btn-sm w-100 mb-1 mb-md-2">  <!-- Botão menor -->
                         Ver Detalhes
                     </a>
                     <form action="{% url 'add_to_cart' product.id %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="btn btn-outline-success w-100">
-                            Adicionar ao Carinho
+                        <button type="submit" class="btn btn-outline-success btn-sm w-100">  <!-- Botão menor -->
+                            Adicionar ao Carrinho
                         </button>
                     </form>
                 </div>
             </div>
         </div>
-        {% empty %}
-        <div class="col-12">
-            <div class="alert alert-warning text-center">
-                Nenhum produto disponível no momento
-            </div>
-        </div>
         {% endfor %}
     </div>
 </div>
+
+<style>
+    @media (max-width: 576px) {
+        .product-image {
+            height: 100px !important;
+        }
+        .card-body, .card-footer {
+            padding: 0.5rem !important;
+        }
+    }
+</style>
 {% endblock %}

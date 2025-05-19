@@ -1,14 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+  @media (max-width: 576px) {
+    .custom-card {
+      width: 80vw !important;
+      max-width: 80vw !important;
+    }
+  }
+</style>
+
 <div class="container mt-4">
-    <div class="card mx-auto w-75">
+    <div class="card mx-auto w-75 custom-card" style="background-color: rgba(255, 255, 255, 0.8);">
         <div class="card-header">
             <h2>{{ product.title }}</h2>
         </div>
         <div class="card-body">
             <div class="row align-items-center">
-                <div class="col-md-8">
+
+                <div class="col-md-8 d-flex flex-column">
+                    {% if product.photo %}
+                        <div class="d-md-none mb-3 text-center">
+                            <img src="{{ product.photo.url }}" 
+                                 alt="Foto de {{ product.title }}"
+                                 class="img-thumbnail"
+                                 style="max-width: 100%;">
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning d-md-none">Sem imagem cadastrada</div>
+                    {% endif %}
+
                     <p class="card-text"><strong>Preço:</strong> R$ {{ product.selling_price }}</p>
                     <p class="card-text"><strong>Estoque:</strong> {{ product.quantity }}</p>
                     <p class="card-text"><strong>Descrição:</strong> {{ product.description }}</p>
@@ -24,7 +45,7 @@
                     </div>
                 </div> 
 
-                <div class="col-md-4 text-end">
+                <div class="col-md-4 text-end d-none d-md-block">
                     {% if product.photo %}
                         <img src="{{ product.photo.url }}" 
                              alt="Foto de {{ product.title }}"
@@ -34,6 +55,7 @@
                         <div class="alert alert-warning">Sem imagem cadastrada</div>
                     {% endif %}
                 </div>
+
             </div>
         </div>
     </div>
