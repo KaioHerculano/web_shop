@@ -34,14 +34,14 @@
                     <p class="card-text"><strong>Estoque:</strong> {{ product.quantity }}</p>
                     <p class="card-text"><strong>Descrição:</strong> {{ product.description }}</p>
 
-                    <div class="d-flex gap-2 mt-3">
-                        <a href="{% url 'product_list' %}" class="btn btn-secondary">Voltar</a>
-                        <a href="{% url 'product_update' product.pk %}" class="btn btn-primary">Editar</a>
-                        <form action="{% url 'add_to_cart' product.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn btn-success">Adicionar ao Carrinho</button>
-                        </form>
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                    <a href="{% url 'product_list' %}" class="btn btn-secondary btn-sm px-3 py-2">Voltar</a>
+                    <a href="{% url 'product_update' product.pk %}" class="btn btn-primary btn-sm px-3 py-2">Editar</a>
+                    <form action="{% url 'add_to_cart' product.id %}" method="post" class="d-inline m-0 p-0">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-success btn-sm px-3 py-2">Adicionar ao Carrinho</button>
+                    </form>
                     </div>
                 </div> 
 
