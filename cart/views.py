@@ -1,6 +1,10 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from .cart import Cart
+from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
+
 
 class CartListView(View):
     def get(self, request):
@@ -10,6 +14,7 @@ class CartListView(View):
             'total': cart.total(),
         })
 
+
 class AddToCartView(View):
     def post(self, request, product_id):
         cart = Cart(request)
@@ -17,8 +22,24 @@ class AddToCartView(View):
         cart.add(product_id, quantity)
         return redirect('home')
 
+
 class RemoveFromCartView(View):
     def post(self, request, product_id):
         cart = Cart(request)
         cart.remove(product_id)
+        return redirect('cart_list')
+
+
+@method_decorator(csrf_protect, name='dispatch')
+class UpdateCartItemView(View):
+    def post(self, request, product_id):
+        quantity = int(request.POST.get('quantity', 1))
+        cart = request.session.get('cart', {})
+
+        if quantity > 0:
+            cart[str(product_id)] = quantity
+        else:
+            cart.pop(str(product_id), None)
+
+        request.session['cart'] = cart
         return redirect('cart_list')

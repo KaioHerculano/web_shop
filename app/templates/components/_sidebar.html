@@ -12,8 +12,8 @@
     left: -220px;
     height: 100vh;
     width: 220px;
-    background-color: rgba(255, 255, 255, 0.75); /* fundo translúcido */
-    backdrop-filter: blur(10px); /* efeito blur */
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
     border-right: 1px solid rgba(0,0,0,0.1);
     padding-top: 60px;
     transition: left 0.3s;
@@ -50,9 +50,12 @@
   .sidebar-link:hover {
     background-color: #e9ecef;
   }
+
+  .cart-badge {
+    transform: translate(-50%, -80%) !important;
+  }
 </style>
 
-<!-- HEADER -->
 <header class="bg-white border-bottom py-2 px-3">
   <div class="container-fluid d-flex justify-content-between align-items-center">
 
@@ -61,15 +64,16 @@
       <i class="bi bi-list fs-4"></i>
     </button>
     {% endif %}
-    <!-- Logo -->
+
     <a href="{% url 'home' %}">
       <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo-img">
     </a>
 
-    <!-- Carrinho -->
     <a class="nav-link position-relative" href="{% url 'cart_list' %}">
       <i class="bi bi-cart2 fs-5"></i>
-      <span class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary">0</span>
+      <span class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary cart-badge">
+        {{ cart_items_count }}
+      </span>
     </a>
   </div>
 
@@ -83,7 +87,6 @@
   </div>
 </header>
 
-<!-- SIDEBAR (sempre colapsável) -->
 <div id="sidebar" aria-label="Sidebar navigation">
   <div class="text-center mb-4">
     <a href="{% url 'home' %}">
@@ -99,17 +102,13 @@
   {% endif %}
 </div>
 
-<!-- Overlay para fechar sidebar -->
 <div id="overlay"></div>
 
-<!-- Conteúdo principal -->
 <main class="container mt-4">
   {% block content %}
-  <!-- Seu conteúdo principal vai aqui -->
   {% endblock %}
 </main>
 
-<!-- Script para sidebar -->
 <script>
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('overlay');

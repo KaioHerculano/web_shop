@@ -4,8 +4,110 @@
 <style>
   @media (max-width: 576px) {
     .custom-card {
-      width: 80vw !important;
-      max-width: 80vw !important;
+      width: 90vw !important;
+      max-width: 90vw !important;
+    }
+
+    .btn-group-icons {
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      border-radius: 10px;
+    }
+  }
+
+  .btn-group-icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 1rem;
+  }
+
+  .icon-btn {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+
+  .icon-btn.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+  }
+  .icon-btn.btn-secondary:hover {
+    background-color: #5a6268;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+  }
+
+  .icon-btn.btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+  }
+  .icon-btn.btn-warning:hover {
+    background-color: #e0a800;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+  }
+
+  .icon-btn.btn-success {
+    background-color: #198754;
+    color: #fff;
+  }
+  .icon-btn.btn-success:hover {
+    background-color: #146c43;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+  }
+
+  .icon-btn i {
+    pointer-events: none;
+  }
+
+  .product-info {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    margin-top: 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .product-info p {
+    margin-bottom: 0.8rem;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    color: #333;
+  }
+
+  .product-info p strong {
+    color: #2c3e50;
+    font-weight: 600;
+  }
+
+  .product-price {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #28a745;
+    margin-bottom: 1rem;
+    letter-spacing: 0.03em;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+
+  @media (max-width: 768px) {
+    .product-info {
+      padding: 1rem;
     }
   }
 </style>
@@ -30,18 +132,26 @@
                         <div class="alert alert-warning d-md-none">Sem imagem cadastrada</div>
                     {% endif %}
 
-                    <p class="card-text"><strong>Preço:</strong> R$ {{ product.selling_price }}</p>
-                    <p class="card-text"><strong>Estoque:</strong> {{ product.quantity }}</p>
-                    <p class="card-text"><strong>Descrição:</strong> {{ product.description }}</p>
+                    <div class="product-info">
+                        <p class="product-price">R$ {{ product.selling_price|floatformat:2 }}</p>
+                        <p><strong>Estoque:</strong> {{ product.quantity }}</p>
+                        <p><strong>Descrição:</strong> {{ product.description }}</p>
+                    </div>
 
-                    <div class="d-flex flex-wrap gap-2 mt-3">
-                    <a href="{% url 'product_list' %}" class="btn btn-secondary btn-sm px-3 py-2">Voltar</a>
-                    <a href="{% url 'product_update' product.pk %}" class="btn btn-primary btn-sm px-3 py-2">Editar</a>
-                    <form action="{% url 'add_to_cart' product.id %}" method="post" class="d-inline m-0 p-0">
-                        {% csrf_token %}
-                        <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="btn btn-success btn-sm px-3 py-2">Adicionar ao Carrinho</button>
-                    </form>
+                    <div class="btn-group-icons">
+                        <a href="{% url 'product_list' %}" class="btn btn-secondary icon-btn" title="Voltar">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                        <a href="{% url 'product_update' product.pk %}" class="btn btn-warning icon-btn" title="Editar">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <form action="{% url 'add_to_cart' product.id %}" method="post" class="m-0 p-0">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-success icon-btn" title="Adicionar ao Carrinho">
+                                <i class="bi bi-cart-plus"></i>
+                            </button>
+                        </form>
                     </div>
                 </div> 
 
