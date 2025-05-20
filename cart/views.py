@@ -15,7 +15,7 @@ class AddToCartView(View):
         cart = Cart(request)
         quantity = int(request.POST.get('quantity', 1))
         cart.add(product_id, quantity)
-        return redirect('cart_list')
+        return redirect('home')
 
 class RemoveFromCartView(View):
     def post(self, request, product_id):

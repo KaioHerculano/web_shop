@@ -8,7 +8,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped table-bordered align-middle text-center">
+        <table class="table table-striped table-bordered align-middle">
             <thead class="table-secondary">
                 <tr>
                     <th>Nome</th>
@@ -22,9 +22,9 @@
                     <td>{{ category.name }}</td>
                     <td>{{ category.description|default:"—" }}</td>
                     <td>
-                        <a href="{% url 'category_detail' category.pk %}" class="btn btn-sm btn-info">Ver</a>
-                        <a href="{% url 'category_update' category.pk %}" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="{% url 'category_delete' category.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                        <a href="{% url 'category_detail' category.pk %}" class="btn btn-sm btn-info bi bi-search"></a>
+                        <a href="{% url 'category_update' category.pk %}" class="btn btn-sm btn-warning bi bi-pencil"></a>
+                        <a href="{% url 'category_delete' category.pk %}" class="btn btn-sm btn-danger bi bi-trash"></a>
                     </td>
                 </tr>
                 {% endfor %}

@@ -1,0 +1,127 @@
+{% load static %}
+
+<style>
+  .logo-img {
+    max-height: 60px;
+    width: auto;
+  }
+
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: -220px;
+    height: 100vh;
+    width: 220px;
+    background-color: rgba(255, 255, 255, 0.75); /* fundo translúcido */
+    backdrop-filter: blur(10px); /* efeito blur */
+    border-right: 1px solid rgba(0,0,0,0.1);
+    padding-top: 60px;
+    transition: left 0.3s;
+    z-index: 1040;
+    overflow-y: auto;
+  }
+
+  #sidebar.show {
+    left: 0;
+  }
+
+  #overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1030;
+  }
+
+  #overlay.show {
+    display: block;
+  }
+
+  .sidebar-link {
+    padding: 0.75rem 1rem;
+    display: block;
+    color: #333;
+    text-decoration: none;
+  }
+
+  .sidebar-link:hover {
+    background-color: #e9ecef;
+  }
+</style>
+
+<!-- HEADER -->
+<header class="bg-white border-bottom py-2 px-3">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+
+    {% if user.is_authenticated %}
+    <button class="btn" id="sidebarToggle" aria-label="Toggle sidebar">
+      <i class="bi bi-list fs-4"></i>
+    </button>
+    {% endif %}
+    <!-- Logo -->
+    <a href="{% url 'home' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo-img">
+    </a>
+
+    <!-- Carrinho -->
+    <a class="nav-link position-relative" href="{% url 'cart_list' %}">
+      <i class="bi bi-cart2 fs-5"></i>
+      <span class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary">0</span>
+    </a>
+  </div>
+
+  <div class="container-fluid mt-2 px-3 d-flex justify-content-center">
+    <form class="d-flex" role="search" style="width: 600px;">
+      <input class="form-control form-control-sm" type="search" placeholder="Pesquisar..." style="height: 30px; font-size: 0.875rem;">
+      <button class="btn btn-outline-dark btn-sm ms-2" type="submit" style="height: 30px; padding: 0 0.75rem;">
+        <i class="bi bi-search"></i>
+      </button>
+    </form>
+  </div>
+</header>
+
+<!-- SIDEBAR (sempre colapsável) -->
+<div id="sidebar" aria-label="Sidebar navigation">
+  <div class="text-center mb-4">
+    <a href="{% url 'home' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo-img mb-2">
+    </a>
+  </div>
+  {% if user.is_authenticated %}
+  <ul class="nav flex-column">
+    <li><a href="{% url 'brand_list' %}" class="sidebar-link">Marcas</a></li>
+    <li><a href="{% url 'product_list' %}" class="sidebar-link">Produtos</a></li>
+    <li><a href="{% url 'category_list' %}" class="sidebar-link">Categorias</a></li>
+  </ul>
+  {% endif %}
+</div>
+
+<!-- Overlay para fechar sidebar -->
+<div id="overlay"></div>
+
+<!-- Conteúdo principal -->
+<main class="container mt-4">
+  {% block content %}
+  <!-- Seu conteúdo principal vai aqui -->
+  {% endblock %}
+</main>
+
+<!-- Script para sidebar -->
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  const toggleBtn = document.getElementById('sidebarToggle');
+
+  toggleBtn?.addEventListener('click', () => {
+    sidebar.classList.toggle('show');
+    overlay.classList.toggle('show');
+  });
+
+  overlay?.addEventListener('click', () => {
+    sidebar.classList.remove('show');
+    overlay.classList.remove('show');
+  });
+</script>
