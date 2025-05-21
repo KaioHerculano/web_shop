@@ -1,7 +1,6 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from .cart import Cart
-from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 
@@ -34,12 +33,9 @@ class RemoveFromCartView(View):
 class UpdateCartItemView(View):
     def post(self, request, product_id):
         quantity = int(request.POST.get('quantity', 1))
-        cart = request.session.get('cart', {})
-
+        cart = Cart(request)
         if quantity > 0:
-            cart[str(product_id)] = quantity
+            cart.update(product_id, quantity)
         else:
-            cart.pop(str(product_id), None)
-
-        request.session['cart'] = cart
+            cart.remove(product_id)
         return redirect('cart_list')

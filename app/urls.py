@@ -8,5 +8,6 @@ urlpatterns = [
     path('', include('categories.urls')),
     path('', include('cart.urls')),
     path('', include('products.urls')),
+    path('', include('orders.urls')),
     path('', views.HomeView.as_view(), name='home'),
 ]
