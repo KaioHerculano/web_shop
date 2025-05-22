@@ -19,6 +19,9 @@
     transition: left 0.3s;
     z-index: 1040;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   #sidebar.show {
@@ -54,27 +57,32 @@
   .cart-badge {
     transform: translate(-50%, -80%) !important;
   }
+
+  .logout-form {
+    margin: 0;
+  }
 </style>
 
 <header class="bg-white border-bottom py-2 px-3">
   <div class="container-fluid d-flex justify-content-between align-items-center">
 
-    {% if user.is_authenticated %}
-    <button class="btn" id="sidebarToggle" aria-label="Toggle sidebar">
-      <i class="bi bi-list fs-4"></i>
-    </button>
-    {% endif %}
+      <button class="btn" id="sidebarToggle" aria-label="Toggle sidebar">
+        <i class="bi bi-list fs-4"></i>
+      </button>
 
     <a href="{% url 'home' %}">
       <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo-img">
     </a>
 
-    <a class="nav-link position-relative" href="{% url 'cart_list' %}">
-      <i class="bi bi-cart2 fs-5"></i>
-      <span class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary cart-badge">
-        {{ cart_items_count }}
-      </span>
-    </a>
+    <div class="d-flex align-items-center">
+      <a class="nav-link position-relative" href="{% url 'cart_list' %}">
+        <i class="bi bi-cart2 fs-5"></i>
+        <span class="position-absolute start-100 translate-middle badge rounded-pill bg-secondary cart-badge">
+          {{ cart_items_count }}
+        </span>
+      </a>
+      <!-- Botões de login/logout removidos do header -->
+    </div>
   </div>
 
   <div class="container-fluid mt-2 px-3 d-flex justify-content-center">
@@ -88,19 +96,38 @@
 </header>
 
 <div id="sidebar" aria-label="Sidebar navigation">
-  <div class="text-center mb-4">
-    <a href="{% url 'home' %}">
-      <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo-img mb-2">
-    </a>
+  <div>
+    <div class="text-center mb-4">
+      <a href="{% url 'home' %}">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo-img mb-2">
+      </a>
+    </div>
+
+    <ul class="nav flex-column">
+      {% if perms.brands.view_brand %}
+        <li><a href="{% url 'brand_list' %}" class="sidebar-link">Marcas</a></li>
+      {% endif %}
+      {% if perms.products.view_product %}
+        <li><a href="{% url 'product_list' %}" class="sidebar-link">Produtos</a></li>
+      {% endif %}
+      {% if perms.categories.view_category %}
+        <li><a href="{% url 'category_list' %}" class="sidebar-link">Categorias</a></li>
+      {% endif %}
+    </ul>
   </div>
-  {% if user.is_authenticated %}
-  <ul class="nav flex-column">
-    <li><a href="{% url 'brand_list' %}" class="sidebar-link">Marcas</a></li>
-    <li><a href="{% url 'product_list' %}" class="sidebar-link">Produtos</a></li>
-    <li><a href="{% url 'category_list' %}" class="sidebar-link">Categorias</a></li>
-  </ul>
-  {% endif %}
+
+  <div class="text-center p-3">
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'logout' %}" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger btn-sm w-75 mx-auto">Sair</button>
+      </form>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm w-75 mx-auto">Entrar</a>
+    {% endif %}
+  </div>
 </div>
+
 
 <div id="overlay"></div>
 

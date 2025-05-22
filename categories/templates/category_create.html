@@ -5,7 +5,9 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Criar</button>
+    {% if perms.categories.add_category %}
+        <button type="submit" class="btn btn-success">Criar</button>
+    {% endif %}
     <a href="{% url 'category_list' %}" class="btn btn-secondary">Cancelar e Voltar</a>
 </form>
 {% endblock %}

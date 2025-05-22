@@ -5,7 +5,9 @@
 <p>Tem certeza que deseja deletar a marca: <strong>{{ object.name }}</strong>?</p>
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Sim, deletar</button>
+    {% if perms.brands.delete_brand %}
+        <button type="submit" class="btn btn-danger">Sim, deletar</button>
+    {% endif %}
     <a href="{% url 'brand_list' %}" class="btn btn-secondary">Cancelar e Voltar</a>
 </form>
 {% endblock %}

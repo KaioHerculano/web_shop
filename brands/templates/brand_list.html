@@ -3,7 +3,9 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Lista de Marcas</h1>
-        <a href="{% url 'brand_create' %}" class="btn btn-success mb-3">Nova Marca</a>
+        {% if perms.brands.add_brand %}
+            <a href="{% url 'brand_create' %}" class="btn btn-success mb-3">Nova Marca</a>
+        {% endif %}
     </div>
 
     <div class="table-responsive">
@@ -21,9 +23,15 @@
                     <td>{{ brand.name }}</td>
                     <td>{{ brand.description|default:"—" }}</td>
                     <td>
-                        <a href="{% url 'brand_detail' brand.pk %}" class="btn btn-sm btn-info bi bi-search"></a>
-                        <a href="{% url 'brand_update' brand.pk %}" class="btn btn-sm btn-warning bi bi-pencil"></a>
-                        <a href="{% url 'brand_delete' brand.pk %}" class="btn btn-sm btn-danger bi bi-trash"></a>
+                        {% if perms.brands.view_brand %}
+                            <a href="{% url 'brand_detail' brand.pk %}" class="btn btn-sm btn-info bi bi-search"></a>
+                        {% endif %}
+                        {% if perms.brands.change_brand %}
+                            <a href="{% url 'brand_update' brand.pk %}" class="btn btn-sm btn-warning bi bi-pencil"></a>
+                        {% endif %}
+                        {% if perms.brands.delete_brand %}
+                            <a href="{% url 'brand_delete' brand.pk %}" class="btn btn-sm btn-danger bi bi-trash"></a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

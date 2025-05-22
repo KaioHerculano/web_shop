@@ -4,7 +4,9 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1>Lista de Produtos</h1>
-        <a href="{% url 'product_create' %}" class="btn btn-success mb-3">Novo Produto</a>
+        {% if perms.products.view_product %}
+            <a href="{% url 'product_create' %}" class="btn btn-success mb-3">Novo Produto</a>
+        {% endif %}
     </div>
 
     <div class="table-responsive">
@@ -24,9 +26,15 @@
                     <td>R$ {{ product.selling_price }}</td>
                     <td>{{ product.quantity }}</td>
                     <td>
-                        <a href="{% url 'product_detail' product.pk %}" class="btn btn-info btn-sm bi-search"></a>
-                        <a href="{% url 'product_update' product.pk %}" class="btn btn-warning btn-sm bi bi-pencil"></a>
-                        <a href="{% url 'product_delete' product.pk %}" class="btn btn-danger btn-sm bi bi-trash"></a>
+                        {% if perms.products.view_product %}
+                            <a href="{% url 'product_detail' product.pk %}" class="btn btn-info btn-sm bi-search"></a>
+                        {% endif %}
+                        {% if perms.products.change_product %}
+                            <a href="{% url 'product_update' product.pk %}" class="btn btn-warning btn-sm bi bi-pencil"></a>
+                        {% endif %}
+                        {% if perms.products.delete_product %}
+                            <a href="{% url 'product_delete' product.pk %}" class="btn btn-danger btn-sm bi bi-trash"></a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

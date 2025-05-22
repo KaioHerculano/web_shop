@@ -23,9 +23,7 @@
       {% if form.photo.value %}
         <div class="form-check mb-3">
           {{ form.photo.clear_checkbox }}
-          <label class="form-check-label" for="{{ form.photo.clear_checkbox.id_for_label }}">
-            Remover foto atual
-          </label>
+          <label class="form-check-label" for="{{ form.photo.clear_checkbox.id_for_label }}"></label>
         </div>
       {% endif %}
 
@@ -34,7 +32,9 @@
           <i class="bi bi-arrow-left"></i> Cancelar
         </a>
         <button type="submit" class="btn btn-success">
-          <i class="bi bi-save"></i> Atualizar
+          {% if perms.products.change_product %}
+            <i class="bi bi-save"></i> Atualizar
+          {% endif %}
         </button>
       </div>
     </form>

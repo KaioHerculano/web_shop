@@ -24,9 +24,11 @@
         <a href="{% url 'product_list' %}" class="btn btn-outline-secondary">
           <i class="bi bi-arrow-left"></i> Cancelar
         </a>
-        <button type="submit" class="btn btn-success">
-          <i class="bi bi-plus-circle"></i> Salvar
-        </button>
+        {% if perms.products.add_product %}
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Salvar
+          </button>
+        {% endif %}
       </div>
     </form>
   </div>

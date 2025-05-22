@@ -4,7 +4,9 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="mb-0">Lista de Categorias</h1>
-        <a href="{% url 'category_create' %}" class="btn btn-success mb-3">Nova Categoria</a>
+        {% if perms.categories.add_category %}
+            <a href="{% url 'category_create' %}" class="btn btn-success mb-3">Nova Categoria</a>
+        {% endif %}
     </div>
 
     <div class="table-responsive">
@@ -22,9 +24,17 @@
                     <td>{{ category.name }}</td>
                     <td>{{ category.description|default:"—" }}</td>
                     <td>
-                        <a href="{% url 'category_detail' category.pk %}" class="btn btn-sm btn-info bi bi-search"></a>
-                        <a href="{% url 'category_update' category.pk %}" class="btn btn-sm btn-warning bi bi-pencil"></a>
-                        <a href="{% url 'category_delete' category.pk %}" class="btn btn-sm btn-danger bi bi-trash"></a>
+                        {% if perms.categories.view_category %}
+                            <a href="{% url 'category_detail' category.pk %}" class="btn btn-sm btn-info bi bi-search"></a>
+                        {% endif %}
+
+                        {% if perms.categories.change_category %}
+                            <a href="{% url 'category_update' category.pk %}" class="btn btn-sm btn-warning bi bi-pencil"></a>
+                        {% endif %}
+
+                        {% if perms.categories.delete_category %}
+                            <a href="{% url 'category_delete' category.pk %}" class="btn btn-sm btn-danger bi bi-trash"></a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

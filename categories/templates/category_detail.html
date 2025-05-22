@@ -4,7 +4,11 @@
 <h1>{{ object.name }}</h1>
 <p><strong>Descrição:</strong> {{ object.description|default:"No description." }}</p>
 
-<a href="{% url 'category_update' object.pk %}" class="btn btn-warning">Editar</a>
-<a href="{% url 'category_delete' object.pk %}" class="btn btn-danger">Deletar</a>
-<a href="{% url 'category_list' %}" class="btn btn-secondary">Cancelar e Voltar</a>
+{% if perms.categories.change_category %}
+    <a href="{% url 'category_update' object.pk %}" class="btn btn-warning">Editar</a>
+{% endif %}
+{% if perms.categories.delete_category %}
+    <a href="{% url 'category_delete' object.pk %}" class="btn btn-danger">Deletar</a>
+{% endif %}
+<a href="{% url 'category_list' %}" class="btn btn-secondary">Voltar</a>
 {% endblock %}

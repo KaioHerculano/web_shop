@@ -6,7 +6,9 @@
     <p>Tem certeza que deseja excluir o produto "{{ product.title }}"?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+        {% if perms.products.delete_product %}
+            <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+        {% endif %}
         <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
