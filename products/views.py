@@ -10,11 +10,10 @@ class ProductListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = 'products'
     permission_required = 'products.view_product'
 
-class ProductDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+class ProductDetailView(DetailView):
     model = Product
     template_name = 'product_detail.html'
     context_object_name = 'product'
-    permission_required = 'products.view_product'
 
 class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Product

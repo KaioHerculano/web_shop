@@ -114,17 +114,16 @@
         <li><a href="{% url 'category_list' %}" class="sidebar-link">Categorias</a></li>
       {% endif %}
     </ul>
-  </div>
-
-  <div class="text-center p-3">
-    {% if user.is_authenticated %}
-      <form method="post" action="{% url 'logout' %}" class="logout-form">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-outline-danger btn-sm w-75 mx-auto">Sair</button>
-      </form>
-    {% else %}
-      <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm w-75 mx-auto">Entrar</a>
-    {% endif %}
+      <div class="text-center p-3">
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'logout' %}" class="logout-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm w-75 mx-auto">Sair</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm w-75 mx-auto">Entrar</a>
+        {% endif %}
+      </div>
   </div>
 </div>
 
