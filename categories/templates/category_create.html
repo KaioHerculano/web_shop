@@ -1,13 +1,36 @@
 {% extends 'base.html' %}
-{% block title %}Nova Categoria{% endblock %}
+
 {% block content %}
-<h1>Nova Categoria</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    {% if perms.categories.add_category %}
-        <button type="submit" class="btn btn-success">Criar</button>
-    {% endif %}
-    <a href="{% url 'category_list' %}" class="btn btn-secondary">Cancelar e Voltar</a>
-</form>
+<div class="container mt-5">
+  <div class="card mx-auto shadow-lg p-4" style="max-width: 700px; background-color: rgba(255, 255, 255, 0.9);">
+    <h2 class="mb-4 text-center">Cadastrar Nava Categoria</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      {% for field in form %}
+        <div class="mb-3">
+          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <div class="form-text">{{ field.help_text }}</div>
+          {% endif %}
+          {% for error in field.errors %}
+            <div class="text-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <div class="d-flex justify-content-between mt-4">
+        <a href="{% url 'category_list' %}" class="btn btn-secondary">
+          <i></i> Cancelar
+        </a>
+        {% if perms.categories.add_category %}
+          <button type="submit" class="btn btn-success">
+            <i></i> Salvar
+          </button>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

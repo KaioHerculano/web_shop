@@ -1,13 +1,31 @@
 {% extends 'base.html' %}
+
 {% block title %}Deletar Categoria{% endblock %}
+
 {% block content %}
-<h1>Confirmar Deleção</h1>
-<p>Tem certeza que deseja deletar a categoria: <strong>{{ object.name }}</strong>?</p>
-<form method="post">
-    {% csrf_token %}
-    {% if perms.categories.delete_category %}
-        <button type="submit" class="btn btn-danger">Sim, deletar</button>
-    {% endif %}
-    <a href="{% url 'category_list' %}" class="btn btn-secondary">Cancelar e Voltar</a>
-</form>
+<section class="container my-5">
+    <div class="card shadow-sm border-danger">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> Confirmar Deleção</h4>
+        </div>
+        <div class="card-body">
+            <p class="lead">
+                Tem certeza de que deseja <strong>deletar</strong> a categoria 
+                <strong class="text-danger">{{ object.name }}</strong>?
+            </p>
+            <p class="text-muted">Essa ação não poderá ser desfeita.</p>
+            <form method="post" class="d-flex gap-2">
+                {% csrf_token %}
+                {% if perms.categories.delete_category %}
+                    <button type="submit" class="btn btn-danger">
+                        <i></i> Sim, deletar
+                    </button>
+                {% endif %}
+                <a href="{% url 'category_list' %}" class="btn btn-secondary">
+                    <i></i> Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</section>
 {% endblock %}
