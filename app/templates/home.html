@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
+
+<!-- Campo de busca -->
 <div class="container-fluid mt-2 px-3 d-flex justify-content-center">
     <form class="d-flex" method="get" action="{% url 'home' %}" style="width: 600px;">
         <input name="q" class="form-control form-control-sm" type="search" placeholder="Pesquisar..." value="{{ request.GET.q }}" style="height: 30px; font-size: 0.875rem;">
@@ -10,7 +12,15 @@
     </form>
 </div>
 
-<div class="container mt-3 mt-md-2">
+<!-- Banner -->
+<div class="hero-banner my-2 mx-auto text-center">
+    <a href="{% url 'home' %}">
+        <img src="{% static 'images/banner.jpg' %}" alt="Banner" class="img-fluid banner-img">
+    </a>
+</div>
+
+<!-- Cards de produtos -->
+<div class="container mt-3 mt-md-4">
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
         {% for product in products %}
         <div class="col">
@@ -19,7 +29,7 @@
                 <img src="{{ product.photo.url }}" 
                      class="card-img-top product-image" 
                      alt="{{ product.title }}" 
-                     style="height: 120px; height: 200px; object-fit: contain; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                     style="height: 200px; object-fit: contain; border-top-left-radius: 12px; border-top-right-radius: 12px;">
                 {% else %}
                 <div class="text-center py-3 py-md-5 bg-body-secondary" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
                     <i class="bi bi-image fs-1 text-muted"></i>
@@ -45,19 +55,42 @@
     </div>
 </div>
 
+<!-- Estilos -->
 <style>
+    /* Banner */
+    .hero-banner {
+        max-width: 100%;
+        padding: 0 15px;
+    }
+
+    .banner-img {
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .banner-img:hover {
+        transform: scale(1.01);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Responsivo para imagens de produto */
     @media (max-width: 576px) {
         .product-image {
             height: 100px !important;
         }
+
         .card-body, .card-footer {
             padding: 0.75rem !important;
         }
     }
 
+    /* Efeito hover nos cards */
     .card:hover {
         transform: scale(1.03);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     }
 
     .card-title {
