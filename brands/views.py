@@ -10,6 +10,12 @@ class BrandListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = 'brands'
     permission_required = 'brands.view_brand'
 
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return models.Brand.objects.filter(name__icontains=query)
+        return models.Brand.objects.all()
+
 
 class BrandCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = models.Brand
