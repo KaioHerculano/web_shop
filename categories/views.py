@@ -10,6 +10,12 @@ class CategoryListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     context_object_name = 'categories'
     permission_required = 'categories.view_category'
 
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return models.Category.objects.filter(name__icontains=query)
+        return models.Category.objects.all()
+
 
 class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = models.Category
