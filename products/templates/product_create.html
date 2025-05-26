@@ -21,12 +21,12 @@
       {% endfor %}
 
       <div class="d-flex justify-content-between mt-4">
-        <a href="{% url 'product_list' %}" class="btn btn-outline-secondary">
-          <i class="bi bi-arrow-left"></i> Cancelar
+        <a href="{% url 'product_list' %}" class="btn btn-secondary">
+          <i></i> Cancelar
         </a>
         {% if perms.products.add_product %}
           <button type="submit" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> Salvar
+            <i></i> Salvar
           </button>
         {% endif %}
       </div>
