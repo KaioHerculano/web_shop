@@ -15,9 +15,77 @@
 <!-- Banner -->
 <div class="hero-banner my-2 mx-auto text-center">
     <a href="{% url 'home' %}">
-        <img src="{% static 'images/banner.jpg' %}" alt="Banner" class="img-fluid banner-img">
+        <img src="{% static 'images/banner.png' %}" alt="Banner" class="img-fluid banner-img">
     </a>
 </div>
+
+<!-- Categorias -->
+<div class="container mt-4">
+    <div class="row justify-content-center g-3">
+
+        <!-- Card: Mercearia -->
+        <div class="col-6 col-sm-4 col-md-2">
+            <a href="?category=Mercearia" class="text-decoration-none">
+                <div class="card text-center shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-basket-fill fs-2 text-warning"></i>
+                        <h6 class="mt-2 mb-0 text-dark">Mercearia</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Card: Frutas -->
+        <div class="col-6 col-sm-4 col-md-2">
+            <a href="?category=Frutas" class="text-decoration-none">
+                <div class="card text-center shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-apple fs-2 text-danger"></i>
+                        <h6 class="mt-2 mb-0 text-dark">Frutas</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Card: Saladas -->
+        <div class="col-6 col-sm-4 col-md-2">
+            <a href="?category=Saladas" class="text-decoration-none">
+                <div class="card text-center shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-flower1 fs-2 text-success"></i>
+                        <h6 class="mt-2 mb-0 text-dark">Saladas</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Card: Congelados -->
+        <div class="col-6 col-sm-4 col-md-2">
+            <a href="?category=Congelados" class="text-decoration-none">
+                <div class="card text-center shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-snow fs-2 text-info"></i>
+                        <h6 class="mt-2 mb-0 text-dark">Congelados</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Card: Todos -->
+        <div class="col-6 col-sm-4 col-md-2">
+            <a href="{% url 'home' %}" class="text-decoration-none">
+                <div class="card text-center shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-grid-3x3-gap-fill fs-2 text-primary"></i>
+                        <h6 class="mt-2 mb-0 text-dark">Todos</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
+
 
 <!-- Cards de produtos -->
 <div class="container mt-3 mt-md-4">
