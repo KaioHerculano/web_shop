@@ -48,13 +48,54 @@
                 </div>
             </a>
         </div>
+<<<<<<< HEAD
         {% endfor %}
         <!-- Todos -->
+=======
+
+        <!-- Card: Frutas -->
+        <div class="col-6 col-sm-4 col-md-2">
+            <a href="?category=Frutas" class="text-decoration-none">
+                <div class="card text-center shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-apple fs-2 text-danger"></i>
+                        <h6 class="mt-2 mb-0 text-dark">Frutas</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Card: Saladas -->
+        <div class="col-6 col-sm-4 col-md-2">
+            <a href="?category=Saladas" class="text-decoration-none">
+                <div class="card text-center shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-flower1 fs-2 text-success"></i>
+                        <h6 class="mt-2 mb-0 text-dark">Saladas</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Card: Congelados -->
+        <div class="col-6 col-sm-4 col-md-2">
+            <a href="?category=Congelados" class="text-decoration-none">
+                <div class="card text-center shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <i class="bi bi-snow fs-2 text-info"></i>
+                        <h6 class="mt-2 mb-0 text-dark">Congelados</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Card: Todos -->
+>>>>>>> parent of 743ed2a (update banner)
         <div class="col-6 col-sm-4 col-md-2">
             <a href="{% url 'home' %}" class="text-decoration-none">
                 <div class="card text-center shadow-sm border-0 h-100 {% if not selected_category %}border border-primary{% endif %}">
                     <div class="card-body">
-                        <i class="bi bi-grid-3x3-gap-fill fs-2 text-muted"></i>
+                        <i class="bi bi-grid-3x3-gap-fill fs-2 text-primary"></i>
                         <h6 class="mt-2 mb-0 text-dark">Todos</h6>
                     </div>
                 </div>
