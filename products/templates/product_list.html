@@ -13,7 +13,7 @@
         <form class="d-flex" role="search" method="get" action="{% url 'product_list' %}" style="width: 600px;">
             <input name="q" class="form-control form-control-sm" type="search" placeholder="Buscar por nome do Produto" style="height: 30px; font-size: 0.875rem;">
             <button class="btn btn-outline-dark btn-sm ms-2" type="submit" style="height: 30px; padding: 0 0.75rem;">
-            <i class="bi bi-search"></i>
+                <i class="bi bi-search"></i>
             </button>
         </form>
     </div>
@@ -33,16 +33,24 @@
                 <tr>
                     <td>{{ product.title }}</td>
                     <td>R$ {{ product.selling_price }}</td>
-                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.quantity|default:"—" }}</td>
                     <td>
-                        {% if perms.products.view_product %}
-                            <a href="{% url 'product_detail' product.pk %}" class="btn btn-info btn-sm bi-search"></a>
-                        {% endif %}
-                        {% if perms.products.change_product %}
-                            <a href="{% url 'product_update' product.pk %}" class="btn btn-warning btn-sm bi bi-pencil"></a>
-                        {% endif %}
-                        {% if perms.products.delete_product %}
-                            <a href="{% url 'product_delete' product.pk %}" class="btn btn-danger btn-sm bi bi-trash"></a>
+                        {% if product.is_external %}
+                            <!-- Produtos API - corrigido para usar api_id -->
+                            <a href="{% url 'product_detail_api' external_id=product.api_id %}" 
+                               class="btn btn-info btn-sm bi bi-search"></a>
+                        {% else %}
+                            <!-- Produtos locais -->
+                            <a href="{% url 'product_detail' pk=product.id %}" 
+                               class="btn btn-info btn-sm bi bi-search"></a>
+                            {% if perms.products.change_product %}
+                                <a href="{% url 'product_update' pk=product.id %}" 
+                                   class="btn btn-warning btn-sm bi bi-pencil"></a>
+                            {% endif %}
+                            {% if perms.products.delete_product %}
+                                <a href="{% url 'product_delete' pk=product.id %}" 
+                                   class="btn btn-danger btn-sm bi bi-trash"></a>
+                            {% endif %}
                         {% endif %}
                     </td>
                 </tr>

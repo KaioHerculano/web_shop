@@ -119,35 +119,54 @@
         </div>
         <div class="card-body">
             <div class="row align-items-center">
-
                 <div class="col-md-8 d-flex flex-column">
-                    {% if product.photo %}
-                        <div class="d-md-none mb-3 text-center">
-                            <img src="{{ product.photo.url }}" 
-                                 alt="Foto de {{ product.title }}"
-                                 class="img-thumbnail"
-                                 style="max-width: 100%;">
-                        </div>
+                    <!-- Imagem mobile -->
+                    {% if is_external %}
+                        {% if product.photo_url %}
+                            <div class="d-md-none mb-3 text-center">
+                                <img src="{{ product.photo_url }}" 
+                                     alt="Foto de {{ product.title }}"
+                                     class="img-thumbnail"
+                                     style="max-width: 100%;">
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning d-md-none">Sem imagem cadastrada</div>
+                        {% endif %}
                     {% else %}
-                        <div class="alert alert-warning d-md-none">Sem imagem cadastrada</div>
+                        {% if product.photo %}
+                            <div class="d-md-none mb-3 text-center">
+                                <img src="{{ product.photo.url }}" 
+                                     alt="Foto de {{ product.title }}"
+                                     class="img-thumbnail"
+                                     style="max-width: 100%;">
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning d-md-none">Sem imagem cadastrada</div>
+                        {% endif %}
                     {% endif %}
 
+                    <!-- Informações do produto -->
                     <div class="product-info">
                         <p class="product-price">R$ {{ product.selling_price|floatformat:2 }}</p>
-                        <p><strong>Estoque:</strong> {{ product.quantity }}</p>
-                        <p><strong>Descrição:</strong> {{ product.description }}</p>
+                        <p><strong>Estoque:</strong> {{ product.quantity|default:"--" }}</p>
+                        <p><strong>Descrição:</strong> {{ product.description|default:"Sem descrição" }}</p>
                     </div>
 
+                    <!-- Botões de ação com estética mantida -->
                     <div class="btn-group-icons">
                         <a href="{% url 'home' %}" class="btn btn-secondary icon-btn" title="Voltar">
                             <i class="bi bi-arrow-left"></i>
                         </a>
-                        {% if perms.products.change_product %}
-                          <a href="{% url 'product_update' product.pk %}" class="btn btn-warning icon-btn" title="Editar">
+                        
+                        {% if not is_external and perms.products.change_product %}
+                          <a href="{% url 'product_update' pk=product.id %}" 
+                             class="btn btn-warning icon-btn" title="Editar">
                               <i class="bi bi-pencil"></i>
                           </a>
                         {% endif %}
-                        <form action="{% url 'add_to_cart' product.id %}" method="post" class="m-0 p-0">
+                        
+                        <form action="{% if is_external %}{% url 'add_api_product_to_cart' product.id %}{% else %}{% url 'add_to_cart' product.id %}{% endif %}" 
+                              method="post" class="m-0 p-0">
                             {% csrf_token %}
                             <input type="hidden" name="quantity" value="1">
                             <button type="submit" class="btn btn-success icon-btn" title="Adicionar ao Carrinho">
@@ -155,19 +174,30 @@
                             </button>
                         </form>
                     </div>
-                </div> 
-
-                <div class="col-md-4 text-end d-none d-md-block">
-                    {% if product.photo %}
-                        <img src="{{ product.photo.url }}" 
-                             alt="Foto de {{ product.title }}"
-                             class="img-thumbnail"
-                             style="max-width: 100%;">
-                    {% else %}
-                        <div class="alert alert-warning">Sem imagem cadastrada</div>
-                    {% endif %}
                 </div>
 
+                <!-- Imagem desktop -->
+                <div class="col-md-4 text-end d-none d-md-block">
+                    {% if is_external %}
+                        {% if product.photo_url %}
+                            <img src="{{ product.photo_url }}" 
+                                 alt="Foto de {{ product.title }}"
+                                 class="img-thumbnail"
+                                 style="max-width: 100%;">
+                        {% else %}
+                            <div class="alert alert-warning">Sem imagem cadastrada</div>
+                        {% endif %}
+                    {% else %}
+                        {% if product.photo %}
+                            <img src="{{ product.photo.url }}" 
+                                 alt="Foto de {{ product.title }}"
+                                 class="img-thumbnail"
+                                 style="max-width: 100%;">
+                        {% else %}
+                            <div class="alert alert-warning">Sem imagem cadastrada</div>
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

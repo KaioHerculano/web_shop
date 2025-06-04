@@ -5,7 +5,10 @@
 <!-- Campo de busca -->
 <div class="container-fluid mt-2 px-3 d-flex justify-content-center">
     <form class="d-flex" method="get" action="{% url 'home' %}" style="width: 600px;">
-        <input name="q" class="form-control form-control-sm" type="search" placeholder="Pesquisar..." value="{{ request.GET.q }}" style="height: 30px; font-size: 0.875rem;">
+        {% if selected_category %}
+            <input type="hidden" name="category" value="{{ selected_category }}">
+        {% endif %}
+        <input name="q" class="form-control form-control-sm" type="search" placeholder="Pesquisar..." value="{{ query }}" style="height: 30px; font-size: 0.875rem;">
         <button class="btn btn-outline-dark btn-sm ms-2" type="submit" style="height: 30px; padding: 0 0.75rem;">
             <i class="bi bi-search"></i>
         </button>
@@ -22,70 +25,34 @@
 <!-- Categorias -->
 <div class="container mt-4">
     <div class="row justify-content-center g-3">
-
-        <!-- Card: Mercearia -->
+        {% for category in categories %}
         <div class="col-6 col-sm-4 col-md-2">
-            <a href="?category=Mercearia" class="text-decoration-none">
-                <div class="card text-center shadow-sm border-0 h-100">
+            <a href="?category={{ category.name }}" class="text-decoration-none">
+                <div class="card text-center shadow-sm border-0 h-100 {% if selected_category == category.name %}border border-primary{% endif %}">
                     <div class="card-body">
-                        <i class="bi bi-basket-fill fs-2 text-warning"></i>
-                        <h6 class="mt-2 mb-0 text-dark">Mercearia</h6>
+                        {% if category.name == "Mercearia" %}
+                            <i class="bi bi-basket-fill fs-2 text-warning"></i>
+                        {% elif category.name == "Frutas" %}
+                            <i class="bi bi-apple fs-2 text-danger"></i>
+                        {% elif category.name == "Saladas" %}
+                            <i class="bi bi-flower1 fs-2 text-success"></i>
+                        {% elif category.name == "Congelados" %}
+                            <i class="bi bi-snow fs-2 text-info"></i>
+                        {% elif category.name == "Limpeza" %}
+                            <i class="bi bi-stars fs-2 text-primary"></i>
+                        {% else %}
+                            <i class="bi bi-tag fs-2 text-secondary"></i>
+                        {% endif %}
+                        <h6 class="mt-2 mb-0 text-dark">{{ category.name }}</h6>
                     </div>
                 </div>
             </a>
         </div>
-
-        <!-- Card: Frutas -->
-        <div class="col-6 col-sm-4 col-md-2">
-            <a href="?category=Frutas" class="text-decoration-none">
-                <div class="card text-center shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <i class="bi bi-apple fs-2 text-danger"></i>
-                        <h6 class="mt-2 mb-0 text-dark">Frutas</h6>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Card: Saladas -->
-        <div class="col-6 col-sm-4 col-md-2">
-            <a href="?category=Saladas" class="text-decoration-none">
-                <div class="card text-center shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <i class="bi bi-flower1 fs-2 text-success"></i>
-                        <h6 class="mt-2 mb-0 text-dark">Saladas</h6>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Card: Congelados -->
-        <div class="col-6 col-sm-4 col-md-2">
-            <a href="?category=Congelados" class="text-decoration-none">
-                <div class="card text-center shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <i class="bi bi-snow fs-2 text-info"></i>
-                        <h6 class="mt-2 mb-0 text-dark">Congelados</h6>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <div class="col-6 col-sm-4 col-md-2">
-            <a href="?category=Limpeza" class="text-decoration-none">
-                <div class="card text-center shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <i class="bi bi-stars fs-2 text-primary"></i>
-                        <h6 class="mt-2 mb-0 text-dark">Limpeza</h6>
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- Card: Todos -->
+        {% endfor %}
+        <!-- Todos -->
         <div class="col-6 col-sm-4 col-md-2">
             <a href="{% url 'home' %}" class="text-decoration-none">
-                <div class="card text-center shadow-sm border-0 h-100">
+                <div class="card text-center shadow-sm border-0 h-100 {% if not selected_category %}border border-primary{% endif %}">
                     <div class="card-body">
                         <i class="bi bi-grid-3x3-gap-fill fs-2 text-muted"></i>
                         <h6 class="mt-2 mb-0 text-dark">Todos</h6>
@@ -93,10 +60,8 @@
                 </div>
             </a>
         </div>
-
     </div>
 </div>
-
 
 <!-- Cards de produtos -->
 <div class="container mt-3 mt-md-4">
@@ -104,15 +69,35 @@
         {% for product in products %}
         <div class="col">
             <div class="card h-100 shadow" style="background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); border-radius: 12px; transition: transform 0.3s ease;">
-                {% if product.photo %}
-                <img src="{{ product.photo.url }}" 
-                     class="card-img-top product-image" 
-                     alt="{{ product.title }}" 
-                     style="height: 200px; object-fit: contain; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                
+                {# Imagem do produto - API ou local #}
+                {% if product.is_api %}
+                    {% if product.photo_url %}
+                        <img src="{{ product.photo_url }}" 
+                             class="card-img-top product-image" 
+                             alt="{{ product.title }}" 
+                             style="height: 200px; object-fit: contain; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                    {% else %}
+                        <div class="text-center py-3 py-md-5 bg-body-secondary" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                            <i class="bi bi-image fs-1 text-muted"></i>
+                        </div>
+                    {% endif %}
                 {% else %}
-                <div class="text-center py-3 py-md-5 bg-body-secondary" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
-                    <i class="bi bi-image fs-1 text-muted"></i>
-                </div>
+                    {% if product.photo_url %}
+                        <img src="{{ product.photo_url }}" 
+                             class="card-img-top product-image" 
+                             alt="{{ product.title }}" 
+                             style="height: 200px; object-fit: contain; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                    {% elif product.photo %}
+                        <img src="{{ product.photo.url }}" 
+                             class="card-img-top product-image" 
+                             alt="{{ product.title }}" 
+                             style="height: 200px; object-fit: contain; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                    {% else %}
+                        <div class="text-center py-3 py-md-5 bg-body-secondary" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                            <i class="bi bi-image fs-1 text-muted"></i>
+                        </div>
+                    {% endif %}
                 {% endif %}
 
                 <div class="card-body p-3 text-center" style="background-color: rgba(255, 255, 255, 0.4);">
@@ -121,22 +106,31 @@
                 </div>
 
                 <div class="card-footer p-3 d-flex flex-column align-items-center gap-2" style="background-color: rgba(255, 255, 255, 0.7); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
-                    <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary btn-sm" style="width: 160px;">Ver Detalhes</a>
+                    <a href="{% if product.is_api %}
+                                 {% url 'product_detail_api' external_id=product.id %}
+                             {% else %}
+                                 {% url 'product_detail' pk=product.id %}
+                             {% endif %}"
+                       class="btn btn-primary btn-sm" style="width: 160px;">Ver Detalhes</a>
+                    
+                    {% if not product.is_api %}
                     <form action="{% url 'add_to_cart' product.id %}" method="post" style="width: 160px;">
                         {% csrf_token %}
                         <input type="hidden" name="quantity" value="1">
                         <button type="submit" class="btn btn-success btn-sm w-100">Adicionar ao Carrinho</button>
                     </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
+        {% empty %}
+        <p class="text-center mt-4">Nenhum produto encontrado.</p>
         {% endfor %}
     </div>
 </div>
 
 <!-- Estilos -->
 <style>
-    /* Banner */
     .hero-banner {
         max-width: 100%;
         padding: 0 15px;
@@ -155,7 +149,6 @@
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
     }
 
-    /* Responsivo para imagens de produto */
     @media (max-width: 576px) {
         .product-image {
             height: 100px !important;
@@ -166,7 +159,6 @@
         }
     }
 
-    /* Efeito hover nos cards */
     .card:hover {
         transform: scale(1.03);
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
@@ -177,5 +169,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .border-primary {
+        border-color: #0d6efd !important;
+    }
 </style>
+
 {% endblock %}

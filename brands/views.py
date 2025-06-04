@@ -25,7 +25,6 @@ class BrandCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'brands.add_brand'
 
 
-
 class BrandDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = models.Brand
     template_name = 'brand_detail.html'
