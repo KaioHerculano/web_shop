@@ -14,8 +14,6 @@ urlpatterns = [
     path('products/<int:pk>/update/', views.ProductUpdateView.as_view(), name='product_update'),
     path('products/<int:pk>/delete/', views.ProductDeleteView.as_view(), name='product_delete'),
 
-    path('add-api-product-to-cart/<int:product_id>/', views.AddApiProductToCartView.as_view(), name='add_api_product_to_cart'),
-
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

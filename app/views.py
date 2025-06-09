@@ -7,7 +7,6 @@ from django.contrib import messages
 import requests
 
 
-# Classe para padronizar os dados dos produtos
 class ProductData:
     def __init__(self, id, title, selling_price, photo_url=None, is_api=False, obj=None):
         self.id = id
@@ -53,9 +52,8 @@ class HomeView(TemplateView):
         q = self.request.GET.get('q')
         category_name = self.request.GET.get('category')
 
-        company_id = 1  # ID fixo da empresa
+        company_id = 1
 
-        # Categorias fixas
         context['categories'] = [
             {'name': 'Mercearia'},
             {'name': 'Frutas'},
@@ -64,12 +62,11 @@ class HomeView(TemplateView):
             {'name': 'Limpeza'},
         ]
 
-        # Produtos locais
-        qs = Product.objects.all()
+        queryset = Product.objects.all()
         if category_name:
-            qs = qs.filter(category__name__iexact=category_name)
+            queryset = queryset.filter(category__name__iexact=category_name)
         if q:
-            qs = qs.filter(title__icontains=q)
+            queryset = queryset.filter(title__icontains=q)
 
         local_products = [
             ProductData(
@@ -80,10 +77,9 @@ class HomeView(TemplateView):
                 is_api=False,
                 obj=p,
             )
-            for p in qs
+            for p in queryset
         ]
 
-        # Produtos da API
         api_products = []
         try:
             response = requests.get(

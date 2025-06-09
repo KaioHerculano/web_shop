@@ -39,20 +39,26 @@
                 <tr>
                     <td>{{ item.product.title }}</td>
                     <td>
-                        <form action="{% url 'update_cart_item' item.product.id %}" method="post" id="update-form-{{ item.product.id }}">
-                            {% csrf_token %}
-                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1"
-                                   class="form-control form-control-sm text-center" style="width: 70px;">
-                        </form>
+                        {% if item.type == 'local' %}
+                            <form action="{% url 'update_cart_item' item.product.id %}" method="post" id="update-form-{{ item.product.id }}">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm text-center" style="width: 70px;">
+                            </form>
+                        {% else %}
+                            <!-- Produto API: quantidade apenas exibição -->
+                            <input type="number" disabled value="{{ item.quantity }}" class="form-control form-control-sm text-center" style="width: 70px;">
+                        {% endif %}
                     </td>
                     <td class="text-success fw-bold">
                         R$ {{ item.subtotal|floatformat:2 }}
                     </td>
                     <td>
                         <div class="d-flex justify-content-center align-items-center gap-2">
+                            {% if item.type == 'local' %}
                             <button type="submit" form="update-form-{{ item.product.id }}" class="btn btn-sm btn-success" title="Atualizar">
                                 <i class="bi bi-check-lg"></i>
                             </button>
+                            {% endif %}
 
                             <form action="{% url 'remove_from_cart' item.product.id %}" method="post" style="margin: 0;">
                                 {% csrf_token %}
@@ -71,7 +77,7 @@
     <h4 class="text-end mt-4">Total: <span class="text-success">R$ {{ total|floatformat:2 }}</span></h4>
     <div class="d-flex justify-content-between mt-3">
         <a href="{% url 'home' %}" class="btn btn-secondary">
-            <i></i> Voltar
+            Voltar
         </a>
         <a href="{% url 'finalize_order' %}" class="btn btn-success">
             Finalizar Pedido

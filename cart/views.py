@@ -6,6 +6,8 @@ from django.views.decorators.csrf import csrf_protect
 from products import models as product_models
 import requests
 from django.contrib import messages
+from brands.models import Brand
+from categories.models import Category
 
 
 class CartListView(View):
@@ -33,8 +35,8 @@ class AddApiProductToCartView(View):
         if not token:
             messages.error(request, "Você precisa estar autenticado na API para adicionar este produto.")
             return redirect('home')
-        
-        api_url = f'http://127.0.0.1:5000/api/v1/products/{product_id}/'  # corrigido 'http:'
+
+        api_url = f'http://127.0.0.1:5000/api/v1/products/{product_id}/'
         headers = {'Authorization': f'Bearer {token}'}
 
         try:
@@ -45,17 +47,45 @@ class AddApiProductToCartView(View):
             messages.error(request, f"Erro ao buscar produto na API: {e}")
             return redirect('home')
 
-        product_info = {
-            'id': product_data['id'],
-            'title': product_data.get('title', 'Produto da API'),
-            'price': product_data.get('selling_price', 0),
-        }
+        # Atualize ou crie Brand
+        brand_data = product_data.get('brand')
+        if brand_data:
+            brand_obj, _ = Brand.objects.get_or_create(
+                id=brand_data.get('id'),
+                defaults={'name': brand_data.get('name', 'Marca Desconhecida')}
+            )
+        else:
+            brand_obj = None
+
+        # Atualize ou crie Category
+        category_data = product_data.get('category')
+        if category_data:
+            category_obj, _ = Category.objects.get_or_create(
+                id=category_data.get('id'),
+                defaults={'name': category_data.get('name', 'Categoria Desconhecida')}
+            )
+        else:
+            category_obj = None
+
+        # Atualize ou crie Produto localmente (opcional)
+        product, created = product_models.Product.objects.get_or_create(
+            external_id=product_data['id'],
+            defaults={
+                'title': product_data.get('title', 'Produto da API'),
+                'selling_price': product_data.get('selling_price', 0),
+                'description': product_data.get('description', ''),
+                'quantity': product_data.get('quantity', 0),
+                'brand': brand_obj,
+                'category': category_obj,
+                'serie_number': product_data.get('serie_number', ''),
+            }
+        )
 
         quantity = int(request.POST.get('quantity', 1))
         cart = Cart(request)
-        cart.add_api_product(product_info, quantity)
+        cart.add_api_product(product_data=product_data, quantity=quantity)  # <-- Corrigido aqui
 
-        messages.success(request, f"Produto '{product_info['title']}' adicionado ao carrinho.")
+        messages.success(request, f"Produto '{product.title}' adicionado ao carrinho.")
         return redirect('cart_list')
 
 
