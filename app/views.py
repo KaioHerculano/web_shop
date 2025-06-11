@@ -1,20 +1,19 @@
-from django.shortcuts import render
 from django.views.generic import TemplateView
 from products.models import Product
-from categories.models import Category
 from django.contrib.auth.views import LoginView
 from django.contrib import messages
 import requests
 
 
 class ProductData:
-    def __init__(self, id, title, selling_price, photo_url=None, is_api=False, obj=None):
+    def __init__(self, id, title, selling_price, photo_url=None, is_api=False, obj=None, company_id=None):
         self.id = id
         self.title = title
         self.selling_price = selling_price
         self.photo_url = photo_url
         self.is_api = is_api
         self.obj = obj
+        self.company_id = company_id
 
 
 class CustomLoginView(LoginView):
@@ -99,6 +98,7 @@ class HomeView(TemplateView):
                     selling_price=item.get('selling_price') or item.get('price') or 0,
                     photo_url=item.get('photo') or item.get('photo_url') or None,
                     is_api=True,
+                    company_id=company_id,
                 )
                 for item in api_data
             ]

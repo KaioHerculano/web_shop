@@ -61,30 +61,19 @@ class ProductDetailView(View):
             return redirect('product_list')
     
     def get_api_product(self, request, api_id):
-        token = request.session.get('api_jwt_token')
-        print("TOKEN:", token)
-        if not token:
-            messages.error(request, "Autenticação na API necessária")
-            return redirect('product_list')
-        
         try:
-            api_url = f'http://127.0.0.1:5000/api/v1/products/{api_id}/'
-            headers = {'Authorization': f'Bearer {token}'}
-            response = requests.get(api_url, headers=headers, timeout=5)
-            print("API STATUS:", response.status_code)
+            api_url = f'http://127.0.0.1:5000/api/v1/public/products/1/{api_id}/'  # ajuste o company_id conforme necessário
+            response = requests.get(api_url, timeout=5)
             if response.status_code == 404:
                 messages.error(request, "Produto não encontrado na API")
                 return redirect('product_list')
-                
             response.raise_for_status()
             product_data = response.json()
-            print("API DATA:", product_data)
             return render(request, 'product_detail.html', {
                 'product': product_data,
                 'is_external': True
             })
         except Exception as e:
-            print("API ERROR:", e)
             messages.error(request, f"Erro ao buscar produto na API: {str(e)}")
             return redirect('product_list')
 

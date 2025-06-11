@@ -35,16 +35,10 @@ class AddToCartView(View):
 
 class AddApiProductToCartView(View):
     def post(self, request, product_id):
-        token = request.session.get('api_jwt_token')
-        if not token:
-            messages.error(request, "Você precisa estar autenticado na API para adicionar este produto.")
-            return redirect('home')
-
-        api_url = f'http://127.0.0.1:5000/api/v1/products/{product_id}/'
-        headers = {'Authorization': f'Bearer {token}'}
+        api_url = f'http://127.0.0.1:5000/api/v1/public/products/1/{product_id}/'
 
         try:
-            response = requests.get(api_url, headers=headers, timeout=5)
+            response = requests.get(api_url, timeout=5)
             response.raise_for_status()
             product_data = response.json()
         except Exception as e:
