@@ -36,27 +36,27 @@ class AddToCartView(View):
 class AddApiProductToCartView(View):
     def post(self, request, product_id):
         api_url = f'http://127.0.0.1:5000/api/v1/public/products/1/{product_id}/'
-
         try:
             response = requests.get(api_url, timeout=5)
             response.raise_for_status()
             product_data = response.json()
         except Exception as e:
             messages.error(request, f"Erro ao buscar produto na API: {e}")
-            return redirect('home')
+            return redirect(request.META.get('HTTP_REFERER', 'home'))
 
         quantity = int(request.POST.get('quantity', 1))
         cart = Cart(request)
         cart.add_api_product(product_data=product_data, quantity=quantity)
 
         messages.success(request, f"Produto '{product_data.get('title', 'Produto da API')}' adicionado ao carrinho.")
-        return redirect('cart_list')
+        return redirect(request.META.get('HTTP_REFERER', 'home'))
 
 
 class RemoveFromCartView(View):
     def post(self, request, product_id):
+        product_type = request.POST.get('type')
         cart = Cart(request)
-        cart.remove(product_id)
+        cart.remove(product_id, product_type=product_type)
         return redirect('cart_list')
 
 
@@ -69,5 +69,5 @@ class UpdateCartItemView(View):
         if quantity > 0:
             cart.update(product_id, quantity, product_type=product_type)
         else:
-            cart.remove(product_id, product_type=product_type)
+            cart.remove(product_id, product_type='api')
         return redirect('cart_list')
