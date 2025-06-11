@@ -2,7 +2,6 @@ from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from .forms import OrderForm
-from .models import Order
 from products.models import Product
 from django.conf import settings
 import urllib.parse
@@ -19,14 +18,28 @@ class FinalizeOrderView(FormView):
 
     def form_valid(self, form):
         cart = self.get_cart()
-        products_in_cart = Product.objects.filter(id__in=cart.cart.keys())
+        # Só ids locais para buscar no banco
+        local_ids = [
+            key.split('-', 1)[1]
+            for key in cart.cart.keys()
+            if key.startswith('local-')
+        ]
+        products_in_cart = Product.objects.filter(id__in=local_ids)
 
         order = form.save()
 
         product_lines = []
+        # Produtos locais
         for product in products_in_cart:
-            quantity = cart.cart.get(str(product.id), 0)
+            key = f"local-{product.id}"
+            quantity = cart.cart.get(key, {}).get('quantity', 0)
             product_lines.append(f"{product.title} (x{quantity})")
+        # Produtos da API
+        for key, data in cart.cart.items():
+            if isinstance(data, dict) and data.get('type') == 'api':
+                title = data.get('title', 'Produto da API')
+                quantity = data.get('quantity', 0)
+                product_lines.append(f"{title} (x{quantity})")
 
         products_text = "\n".join(product_lines) if product_lines else "Nenhum produto no carrinho."
 

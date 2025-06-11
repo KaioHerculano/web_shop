@@ -43,10 +43,14 @@
                             <form action="{% url 'update_cart_item' item.product.id %}" method="post" id="update-form-{{ item.product.id }}">
                                 {% csrf_token %}
                                 <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm text-center" style="width: 70px;">
+                                <input type="hidden" name="type" value="local">
                             </form>
                         {% else %}
-                            <!-- Produto API: quantidade apenas exibição -->
-                            <input type="number" disabled value="{{ item.quantity }}" class="form-control form-control-sm text-center" style="width: 70px;">
+                            <form action="{% url 'update_cart_item' item.product.id|cut:'api-' %}" method="post" id="update-form-api-{{ item.product.id }}">
+                                {% csrf_token %}
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control form-control-sm text-center" style="width: 70px;">
+                                <input type="hidden" name="type" value="api">
+                            </form>
                         {% endif %}
                     </td>
                     <td class="text-success fw-bold">
@@ -55,11 +59,14 @@
                     <td>
                         <div class="d-flex justify-content-center align-items-center gap-2">
                             {% if item.type == 'local' %}
-                            <button type="submit" form="update-form-{{ item.product.id }}" class="btn btn-sm btn-success" title="Atualizar">
-                                <i class="bi bi-check-lg"></i>
-                            </button>
+                                <button type="submit" form="update-form-{{ item.product.id }}" class="btn btn-sm btn-success" title="Atualizar">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+                            {% else %}
+                                <button type="submit" form="update-form-api-{{ item.product.id }}" class="btn btn-sm btn-success" title="Atualizar">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
                             {% endif %}
-
                             <form action="{% url 'remove_from_cart' item.product.id %}" method="post" style="margin: 0;">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm btn-danger" title="Remover">
