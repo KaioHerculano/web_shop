@@ -62,7 +62,7 @@ class ProductDetailView(View):
     
     def get_api_product(self, request, api_id):
         try:
-            api_url = f'http://127.0.0.1:5000/api/v1/public/products/1/{api_id}/'  # ajuste o company_id conforme necessário
+            api_url = f'http://127.0.0.1:5000/api/v1/public/products/1/{api_id}/'
             response = requests.get(api_url, timeout=5)
             if response.status_code == 404:
                 messages.error(request, "Produto não encontrado na API")
