@@ -65,15 +65,10 @@
         {% for product in products %}
         <div class="col">
             <div class="card h-100 shadow" style="background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); border-radius: 12px; transition: transform 0.3s ease;">
-                {% if product.photo_url %}
-                    <img src="{{ product.photo_url }}" 
-                         class="card-img-top product-image" 
-                         alt="{{ product.title }}" 
-                         style="height: 200px; object-fit: contain; border-top-left-radius: 12px; border-top-right-radius: 12px;">
-                {% elif product.photo %}
-                    <img src="{{ product.photo.url }}" 
-                         class="card-img-top product-image" 
-                         alt="{{ product.title }}" 
+                {% if product.photo %}
+                    <img src="{{ product.photo }}"
+                         class="card-img-top product-image"
+                         alt="{{ product.title }}"
                          style="height: 200px; object-fit: contain; border-top-left-radius: 12px; border-top-right-radius: 12px;">
                 {% else %}
                     <div class="text-center py-3 py-md-5 bg-body-secondary" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
@@ -95,10 +90,10 @@
                        class="btn btn-primary btn-sm" style="width: 160px;">Ver Detalhes</a>
 
                     <form action="{% if product.is_api %}
-                                      {% url 'add_api_product_to_cart' product_id=product.id %}
-                                  {% else %}
-                                      {% url 'add_to_cart' product.id %}
-                                  {% endif %}"
+                                     {% url 'add_api_product_to_cart' product_id=product.id %}
+                                 {% else %}
+                                     {% url 'add_to_cart' product.id %}
+                                 {% endif %}"
                           method="post" style="width: 160px;">
                         {% csrf_token %}
                         <input type="hidden" name="quantity" value="1">

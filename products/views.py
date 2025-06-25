@@ -62,13 +62,23 @@ class ProductDetailView(View):
     
     def get_api_product(self, request, api_id):
         try:
-            api_url = f'http://127.0.0.1:5000/api/v1/public/products/1/{api_id}/'
+            api_base_url = "http://127.0.0.1:5000"
+            api_url = f'{api_base_url}/api/v1/public/products/1/{api_id}/'
+            
             response = requests.get(api_url, timeout=5)
             if response.status_code == 404:
                 messages.error(request, "Produto não encontrado na API")
                 return redirect('product_list')
             response.raise_for_status()
             product_data = response.json()
+            
+            if 'photo' in product_data and product_data['photo']:
+                photo_url_from_api = product_data['photo']
+                if not photo_url_from_api.startswith('http') and not photo_url_from_api.startswith('/media/'):
+                    product_data['photo'] = f'{api_base_url}/media/{photo_url_from_api}'
+                elif photo_url_from_api.startswith('/media/'):
+                    product_data['photo'] = f'{api_base_url}{photo_url_from_api}'
+
             return render(request, 'product_detail.html', {
                 'product': product_data,
                 'is_external': True

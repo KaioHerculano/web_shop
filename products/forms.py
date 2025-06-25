@@ -14,7 +14,7 @@ class ProductForm(forms.ModelForm):
             'serie_number': forms.TextInput(attrs={'class': 'form-control'}),
             'selling_price': forms.NumberInput(attrs={'class': 'form-control', 'data-mask': '000.000.000,00', 'data-mask-reverse': 'True'}),
             'description': forms.Textarea(attrs={'class': 'form-control'}),
-            'photo': forms.ClearableFileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),
+            'photo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
 
         }
         labels = {
