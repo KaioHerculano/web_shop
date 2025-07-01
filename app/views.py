@@ -37,8 +37,8 @@ class CustomLoginView(LoginView):
                     self.request,
                     f"Falha na autenticação da API externa: {api_response.status_code} - {api_response.text}"
                 )
-        except Exception as e:
-            messages.warning(self.request, f"Erro ao acessar a API externa: {e}")
+        except Exception as error:
+            messages.warning(self.request, f"Erro ao acessar a API externa: {error}")
 
         return response
 
@@ -48,11 +48,12 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        q = self.request.GET.get('q')
-        category_name = self.request.GET.get('category')
 
-        company_id = 1 
+        search_term = self.request.GET.get('q')
+        selected_category = self.request.GET.get('category')
+        company_id = 1
 
+        # Categorias disponíveis
         context['categories'] = [
             {'name': 'Mercearia'},
             {'name': 'Frutas'},
@@ -61,71 +62,76 @@ class HomeView(TemplateView):
             {'name': 'Limpeza'},
         ]
 
-        queryset = Product.objects.all()
-        if category_name:
-            queryset = queryset.filter(category__name__iexact=category_name)
-        if q:
-            queryset = queryset.filter(title__icontains=q)
+        # Produtos locais com estoque
+        filtered_products = Product.objects.filter(quantity__gt=0)
+
+        if selected_category:
+            filtered_products = filtered_products.filter(category__name__iexact=selected_category)
+
+        if search_term:
+            filtered_products = filtered_products.filter(title__icontains=search_term)
 
         local_products = []
-        for p in queryset:
-            local_photo_url = None
-            if p.photo:
-                local_photo_url = p.photo.url
-            
+        for product in filtered_products:
+            photo_url = product.photo.url if product.photo else None
+
             local_products.append(
                 ProductData(
-                    id=p.id,
-                    title=p.title,
-                    selling_price=p.selling_price,
-                    photo=local_photo_url,
+                    id=product.id,
+                    title=product.title,
+                    selling_price=product.selling_price,
+                    photo=photo_url,
                     is_api=False,
-                    obj=p,
+                    obj=product,
                     company_id=company_id,
                 )
             )
 
-        api_products = []
-        api_base_url = "http://127.0.0.1:5000" 
+        # Produtos da API externa
+        external_products = []
+        api_base_url = "http://127.0.0.1:5000"
 
         try:
-            response = requests.get(
+            api_response = requests.get(
                 f'{api_base_url}/api/v1/public/products/{company_id}/',
                 params={
-                    'category': category_name if category_name else None,
-                    'search': q if q else None
+                    'category': selected_category if selected_category else None,
+                    'search': search_term if search_term else None
                 },
                 timeout=5,
             )
-            response.raise_for_status()
-            api_data = response.json()
-            api_products = [] 
-            for item in api_data:
-                processed_photo = item.get('photo') or item.get('photo_url') 
-                
-                if processed_photo:
-                    if not processed_photo.startswith('http'):
-                        if processed_photo.startswith('/media/'):
-                            processed_photo = f'{api_base_url}{processed_photo}'
-                        else:
-                            processed_photo = f'{api_base_url}/media/{processed_photo}'
+            api_response.raise_for_status()
+            api_product_list = api_response.json()
 
-                api_products.append(
+            for product_item in api_product_list:
+                if product_item.get('quantity', 0) <= 0:
+                    continue
+
+                raw_photo = product_item.get('photo') or product_item.get('photo_url')
+                if raw_photo:
+                    if not raw_photo.startswith('http'):
+                        if raw_photo.startswith('/media/'):
+                            raw_photo = f'{api_base_url}{raw_photo}'
+                        else:
+                            raw_photo = f'{api_base_url}/media/{raw_photo}'
+
+                external_products.append(
                     ProductData(
-                        id=item.get('id'),
-                        title=item.get('title'),
-                        selling_price=item.get('selling_price') or item.get('price') or 0,
-                        photo=processed_photo, 
+                        id=product_item.get('id'),
+                        title=product_item.get('title'),
+                        selling_price=product_item.get('selling_price') or product_item.get('price') or 0,
+                        photo=raw_photo,
                         is_api=True,
                         company_id=company_id,
                     )
                 )
-        except Exception as e:
-            messages.error(self.request, f"Erro ao carregar produtos da API externa: {str(e)}")
-            api_products = []
+        except Exception as error:
+            messages.error(self.request, f"Erro ao carregar produtos da API externa: {error}")
+            external_products = []
 
-        context['products'] = local_products + api_products
-        context['query'] = q or ''
-        context['selected_category'] = category_name or ''
+        # Contexto final
+        context['products'] = local_products + external_products
+        context['query'] = search_term or ''
+        context['selected_category'] = selected_category or ''
 
         return context
