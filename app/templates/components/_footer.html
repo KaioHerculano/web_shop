@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-4 mb-4 mb-md-0">
                 <div class="footer-logo mb-3">
-                    <span class="logo-text-footer">Web Shop</span>
+                    <img src="{% static 'images/logo.png' %}" alt="Logo" class="logo-img">
                 </div>
                 <p>Seu mercado online de confiança. Produtos frescos, preços justos e entrega rápida para toda a família.</p>
                 <div class="social-icons mt-3">
@@ -16,21 +16,21 @@
             <div class="col-md-2 mb-4 mb-md-0">
                 <h5 class="footer-title">Links Rápidos</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#top">Início</a></li>
-                    <li><a href="#categorias">Categorias</a></li>
-                    <li><a href="#todos-os-produtos">Produtos</a></li>
-                    <li><a href="#about">Sobre Nós</a></li>
-                    <li><a href="#ofertas">Ofertas</a></li>
+                    <li><a href="{% url 'home' %}#top">Início</a></li>
+                    <li><a href="{% url 'home' %}#categorias">Categorias</a></li>
+                    <li><a href="{% url 'home' %}#todos-os-produtos">Produtos</a></li>
+                    <li><a href="{% url 'home' %}#about">Sobre Nós</a></li>
+                    <li><a href="{% url 'home' %}#ofertas">Ofertas</a></li>
                 </ul>
             </div>
             <div class="col-md-3 mb-4 mb-md-0">
                 <h5 class="footer-title">Atendimento</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#central-ajuda">Central de Ajuda</a></li>
-                    <li><a href="#politica-privacidade">Política de Privacidade</a></li>
-                    <li><a href="#termos-uso">Termos de Uso</a></li>
-                    <li><a href="#trocas-devolucoes">Trocas e Devoluções</a></li>
-                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="{% url 'home' %}#central-ajuda">Central de Ajuda</a></li>
+                    <li><a href="{% url 'home' %}#politica-privacidade">Política de Privacidade</a></li>
+                    <li><a href="{% url 'home' %}#termos-uso">Termos de Uso</a></li>
+                    <li><a href="{% url 'home' %}#trocas-devolucoes">Trocas e Devoluções</a></li>
+                    <li><a href="{% url 'home' %}#faq">FAQ</a></li>
                 </ul>
             </div>
             <div class="col-md-3">

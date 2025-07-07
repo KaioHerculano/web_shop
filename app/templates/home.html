@@ -50,7 +50,7 @@
     <div class="row justify-content-center g-4">
         {% for category in categories %}
         <div class="col-6 col-sm-4 col-md-2">
-            <a href="?category={{ category.name }}#categorias" class="text-decoration-none">
+            <a href="?category={{ category.name }}#todos-os-produtos" class="text-decoration-none">
                 <div class="card category-card {% if selected_category == category.name %}selected{% endif %}">
                     <div class="card-body text-center">
                         {% if category.name == "Mercearia" %}
