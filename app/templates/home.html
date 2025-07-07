@@ -2,45 +2,80 @@
 {% load static %}
 {% block content %}
 
-<div class="container-fluid mt-2 px-3 d-flex justify-content-center">
-    <form class="d-flex" method="get" action="{% url 'home' %}" style="width: 600px;">
+<section class="hero-section">
+    <div class="container hero-content">
+        <h1 class="hero-title">Seu mercado <span style="color: var(--primary-color);">online</span> favorito</h1>
+        <p class="hero-subtitle">Produtos frescos, preços justos e entrega rápida. Tudo que você precisa para sua casa, a apenas um clique de distância.</p>
+        <div class="hero-buttons">
+            <a href="#todos-os-produtos" class="btn btn-primary">Começar a Comprar <i class="bi bi-arrow-right"></i></a>
+            <a href="{% url 'home' %}#ofertas" class="btn btn-outline-light">Ver Ofertas</a>
+        </div>
+        <div class="hero-features mt-5">
+            <div class="hero-feature-item">
+                <i class="bi bi-truck"></i>
+                <h5>Entrega Rápida</h5>
+                <p>Em até 2 horas</p>
+            </div>
+            <div class="hero-feature-item">
+                <i class="bi bi-shield-check"></i>
+                <h5>Compra Segura</h5>
+                <p>100% protegida</p>
+            </div>
+            <div class="hero-feature-item">
+                <i class="bi bi-clock"></i>
+                <h5>24/7 Disponível</h5>
+                <p>Sempre aberto</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container-fluid mt-5 px-3 d-flex justify-content-center">
+    <form class="d-flex" method="get" action="{% url 'home' %}#todos-os-produtos" style="width: 600px;">
         {% if selected_category %}
             <input type="hidden" name="category" value="{{ selected_category }}">
         {% endif %}
-        <input name="q" class="form-control form-control-sm" type="search" placeholder="Pesquisar..." value="{{ query }}" style="height: 30px; font-size: 0.875rem;">
-        <button class="btn btn-outline-dark btn-sm ms-2" type="submit" style="height: 30px; padding: 0 0.75rem;">
-            <i class="bi bi-search"></i>
+        <input name="q" class="form-control rounded-pill border-0 shadow-sm ps-4" type="search" placeholder="Pesquisar produtos..." value="{{ query }}" style="height: 45px; font-size: 1rem; padding-right: 2.5rem;">
+        <button class="btn btn-primary rounded-pill ms-2" type="submit" style="height: 45px; width: 45px; display: flex; align-items: center; justify-content: center;">
+            <i class="bi bi-search fs-5"></i>
         </button>
     </form>
 </div>
 
-<div class="hero-banner my-2 mx-auto text-center">
-    <a href="{% url 'home' %}">
-        <img src="{% static 'images/banner.png' %}" alt="Banner" class="img-fluid banner-img">
-    </a>
-</div>
-
-<div class="container mt-4">
-    <div class="row justify-content-center g-3">
+<section class="container categories-section">
+    <h2 class="section-title">Nossas Categorias</h2>
+    <p class="section-subtitle">Encontre tudo que você precisa organizado por categorias</p>
+    <div class="row justify-content-center g-4">
         {% for category in categories %}
         <div class="col-6 col-sm-4 col-md-2">
-            <a href="?category={{ category.name }}" class="text-decoration-none">
-                <div class="card text-center shadow-sm border-0 h-100 {% if selected_category == category.name %}border border-primary{% endif %}">
-                    <div class="card-body">
+            <a href="?category={{ category.name }}#todos-os-produtos" class="text-decoration-none">
+                <div class="card category-card {% if selected_category == category.name %}selected{% endif %}">
+                    <div class="card-body text-center">
                         {% if category.name == "Mercearia" %}
-                            <i class="bi bi-basket-fill fs-2 text-warning"></i>
+                            <i class="bi bi-basket-fill text-warning"></i>
                         {% elif category.name == "Frutas" %}
-                            <i class="bi bi-apple fs-2 text-danger"></i>
+                            <i class="bi bi-apple text-danger"></i>
                         {% elif category.name == "Saladas" %}
-                            <i class="bi bi-flower1 fs-2 text-success"></i>
+                            <i class="bi bi-flower1 text-success"></i>
                         {% elif category.name == "Congelados" %}
-                            <i class="bi bi-snow fs-2 text-info"></i>
+                            <i class="bi bi-snow text-info"></i>
                         {% elif category.name == "Limpeza" %}
-                            <i class="bi bi-stars fs-2 text-primary"></i>
+                            <i class="bi bi-stars text-primary"></i>
+                        {% elif category.name == "Laticínios" %}
+                            <i class="bi bi-cup-straw text-info"></i>
+                        {% elif category.name == "Pães" or category.name == "Padaria" %}
+                            <i class="bi bi-cup-hot text-brown"></i>
+                        {% elif category.name == "Bebidas" %}
+                            <i class="bi bi-cup-fill text-primary"></i>
+                        {% elif category.name == "Carnes" %}
+                            <i class="bi bi-egg-fried text-danger"></i>
+                        {% elif category.name == "Vegetais" %}
+                            <i class="bi bi-leaf text-success"></i>
                         {% else %}
-                            <i class="bi bi-tag fs-2 text-secondary"></i>
+                            <i class="bi bi-tag text-secondary"></i>
                         {% endif %}
-                        <h6 class="mt-2 mb-0 text-dark">{{ category.name }}</h6>
+                        <h6 class="mt-2 mb-0">{{ category.name }}</h6>
+                        <p>{{ category.product_count}}+ produtos</p>
                     </div>
                 </div>
             </a>
@@ -48,110 +83,203 @@
         {% endfor %}
 
         <div class="col-6 col-sm-4 col-md-2">
-            <a href="{% url 'home' %}" class="text-decoration-none">
-                <div class="card text-center shadow-sm border-0 h-100 {% if not selected_category %}border border-primary{% endif %}">
-                    <div class="card-body">
-                        <i class="bi bi-grid-3x3-gap-fill fs-2 text-primary"></i>
-                        <h6 class="mt-2 mb-0 text-dark">Todos</h6>
+            <a href="{% url 'home' %}#produtos-em-destaque" class="text-decoration-none">
+                <div class="card category-card {% if not selected_category %}selected{% endif %}">
+                    <div class="card-body text-center">
+                        <i class="bi bi-grid-3x3-gap-fill text-primary"></i>
+                        <h6 class="mt-2 mb-0">Todos</h6>
+                        <p>Ver tudo</p>
                     </div>
                 </div>
             </a>
         </div>
     </div>
-</div>
+</section>
 
-<div class="container mt-3 mt-md-4">
-    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
+<section class="container products-section" id="todos-os-produtos">
+    <h2 class="section-title">Todos os Produtos</h2>
+    <p class="section-subtitle">Os melhores produtos com os melhores preços</p>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-4">
         {% for product in products %}
         <div class="col">
-            <div class="card h-100 shadow" style="background-color: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); border-radius: 12px; transition: transform 0.3s ease;">
+            <div class="card product-card">
+                {% if product.discount_percentage %}
+                    <span class="discount-tag">-{{ product.discount_percentage }}% OFF</span>
+                {% endif %}
+
                 {% if product.photo %}
                     <img src="{{ product.photo }}"
                          class="card-img-top product-image"
-                         alt="{{ product.title }}"
-                         style="height: 200px; object-fit: contain; border-top-left-radius: 12px; border-top-right-radius: 12px;">
+                         alt="{{ product.title }}">
                 {% else %}
-                    <div class="text-center py-3 py-md-5 bg-body-secondary" style="border-top-left-radius: 12px; border-top-right-radius: 12px;">
-                        <i class="bi bi-image fs-1 text-muted"></i>
+                    <div class="product-placeholder">
+                        <i class="bi bi-image"></i>
                     </div>
                 {% endif %}
 
-                <div class="card-body p-3 text-center" style="background-color: rgba(255, 255, 255, 0.4);">
-                    <h5 class="card-title fs-5 fw-semibold text-truncate" title="{{ product.title }}">{{ product.title }}</h5>
-                    <p class="card-text text-success fw-bold fs-5 mb-0">R$ {{ product.selling_price|floatformat:2 }}</p>
+                <div class="card-body product-card-body">
+                    <h5 class="card-title product-title" title="{{ product.title }}">{{ product.title }}</h5>
+                    <div class="product-rating">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= product.rating|floatformat:0 %}
+                                <i class="bi bi-star-fill"></i>
+                            {% else %}
+                                <i class="bi bi-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                        ({{ product.rating|floatformat:1 }})
+                    </div>
+                    {% if product.discount_price %}
+                        <p class="card-text product-price-original">R$ {{ product.selling_price|floatformat:2 }}</p>
+                        <p class="card-text product-price-discount">R$ {{ product.discount_price|floatformat:2 }}</p>
+                    {% else %}
+                        <p class="card-text product-price-discount">R$ {{ product.selling_price|floatformat:2 }}</p>
+                    {% endif %}
                 </div>
 
-                <div class="card-footer p-3 d-flex flex-column align-items-center gap-2" style="background-color: rgba(255, 255, 255, 0.7); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
+                <div class="card-footer product-card-footer">
                     <a href="{% if product.is_api %}
                                  {% url 'product_detail_api' external_id=product.id %}
                              {% else %}
                                  {% url 'product_detail' pk=product.id %}
                              {% endif %}"
-                       class="btn btn-primary btn-sm" style="width: 160px;">Ver Detalhes</a>
+                       class="btn btn-primary w-100">Ver Detalhes</a>
 
                     <form action="{% if product.is_api %}
                                      {% url 'add_api_product_to_cart' product_id=product.id %}
                                  {% else %}
                                      {% url 'add_to_cart' product.id %}
                                  {% endif %}"
-                          method="post" style="width: 160px;">
+                          method="post" class="w-100">
                         {% csrf_token %}
                         <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="btn btn-success btn-sm w-100">Adicionar ao Carrinho</button>
+                        <button type="submit" class="btn btn-success w-100">Adicionar ao Carrinho</button>
                     </form>
                 </div>
             </div>
         </div>
         {% empty %}
-        <p class="text-center mt-4">Nenhum produto encontrado.</p>
+        <p class="text-center mt-4 w-100">Nenhum produto encontrado.</p>
         {% endfor %}
     </div>
-</div>
+</section>
 
-<!-- Estilos -->
-<style>
-    .hero-banner {
-        max-width: 100%;
-        padding: 0 15px;
-    }
+<section class="container products-section mt-5" id="ofertas">
+    <h2 class="section-title">Ofertas Imperdíveis!</h2>
+    <p class="section-subtitle">Aproveite os produtos mais baratos com qualidade garantida.</p>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-4">
+        {% for product in cheapest_products %}
+        <div class="col">
+            <div class="card product-card">
+                {% if product.discount_percentage %}
+                    <span class="discount-tag">-{{ product.discount_percentage }}% OFF</span>
+                {% endif %}
 
-    .banner-img {
-        border-radius: 20px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        max-width: 100%;
-        height: auto;
-    }
+                {% if product.photo %}
+                    <img src="{{ product.photo }}"
+                         class="card-img-top product-image"
+                         alt="{{ product.title }}">
+                {% else %}
+                    <div class="product-placeholder">
+                        <i class="bi bi-image"></i>
+                    </div>
+                {% endif %}
 
-    .banner-img:hover {
-        transform: scale(1.01);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
-    }
+                <div class="card-body product-card-body">
+                    <h5 class="card-title product-title" title="{{ product.title }}">{{ product.title }}</h5>
+                    <div class="product-rating">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= product.rating|floatformat:0 %}
+                                <i class="bi bi-star-fill"></i>
+                            {% else %}
+                                <i class="bi bi-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                        ({{ product.rating|floatformat:1 }})
+                    </div>
+                    {% if product.discount_price %}
+                        <p class="card-text product-price-original">R$ {{ product.selling_price|floatformat:2 }}</p>
+                        <p class="card-text product-price-discount">R$ {{ product.discount_price|floatformat:2 }}</p>
+                    {% else %}
+                        <p class="card-text product-price-discount">R$ {{ product.selling_price|floatformat:2 }}</p>
+                    {% endif %}
+                </div>
 
-    @media (max-width: 576px) {
-        .product-image {
-            height: 100px !important;
-        }
+                <div class="card-footer product-card-footer">
+                    <a href="{% if product.is_api %}
+                                 {% url 'product_detail_api' external_id=product.id %}
+                             {% else %}
+                                 {% url 'product_detail' pk=product.id %}
+                             {% endif %}"
+                       class="btn btn-primary w-100">Ver Detalhes</a>
 
-        .card-body, .card-footer {
-            padding: 0.75rem !important;
-        }
-    }
-
-    .card:hover {
-        transform: scale(1.03);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .card-title {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .border-primary {
-        border-color: #0d6efd !important;
-    }
-</style>
+                    <form action="{% if product.is_api %}
+                                     {% url 'add_api_product_to_cart' product_id=product.id %}
+                                 {% else %}
+                                     {% url 'add_to_cart' product.id %}
+                                 {% endif %}"
+                          method="post" class="w-100">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-success w-100">Adicionar ao Carrinho</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center mt-4 w-100">Nenhum produto em oferta encontrado.</p>
+        {% endfor %}
+    </div>
+</section>
+<section class="container about-section" id="about">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="about-text">
+                <h3>Sobre o Web Shop</h3>
+                <p>Há mais de 15 anos, o Web Shop tem sido a escolha preferida das famílias brasileiras para suas compras do dia a dia. Oferecemos produtos frescos, de qualidade superior e com preços justos.</p>
+                <p>Nossa missão é tornar suas compras mais práticas e convenientes, sem abrir mão da qualidade que você merece. Com entrega rápida e atendimento personalizado, estamos sempre prontos para servir você.</p>
+                <div class="about-stats mt-4">
+                    <div class="about-stat-item">
+                        <div class="icon-wrapper"><i class="bi bi-people-fill"></i></div>
+                        <div>
+                            <h4>50K+</h4>
+                            <p>Clientes Satisfeitos</p>
+                        </div>
+                    </div>
+                    <div class="about-stat-item">
+                        <div class="icon-wrapper"><i class="bi bi-award-fill"></i></div>
+                        <div>
+                            <h4>15+</h4>
+                            <p>Anos de Experiência</p>
+                        </div>
+                    </div>
+                    <div class="about-stat-item">
+                        <div class="icon-wrapper"><i class="bi bi-truck-flatbed"></i></div>
+                        <div>
+                            <h4>1000+</h4>
+                            <p>Entregas por Dia</p>
+                        </div>
+                    </div>
+                    <div class="about-stat-item">
+                        <div class="icon-wrapper"><i class="bi bi-flower1"></i></div>
+                        <div>
+                            <h4>100%</h4>
+                            <p>Produtos Frescos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 position-relative">
+            <div class="about-image-placeholder">
+                {# O background agora é via CSS em .about-image-placeholder #}
+            </div>
+            <div class="our-promise-card">
+                <h5>Nossa Promessa</h5>
+                <p>Produtos frescos, entrega rápida e atendimento excepcional. Sua satisfação é nossa prioridade.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 {% endblock %}
