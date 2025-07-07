@@ -2,13 +2,15 @@
 {% load static %}
 {% block content %}
 
-<section class="hero-section">
+<div id="top"></div>  {# Para linkar o topo da página #}
+
+<section class="hero-section" id="home">
     <div class="container hero-content">
         <h1 class="hero-title">Seu mercado <span style="color: var(--primary-color);">online</span> favorito</h1>
         <p class="hero-subtitle">Produtos frescos, preços justos e entrega rápida. Tudo que você precisa para sua casa, a apenas um clique de distância.</p>
         <div class="hero-buttons">
             <a href="#todos-os-produtos" class="btn btn-primary">Começar a Comprar <i class="bi bi-arrow-right"></i></a>
-            <a href="{% url 'home' %}#ofertas" class="btn btn-outline-light">Ver Ofertas</a>
+            <a href="#ofertas" class="btn btn-outline-light">Ver Ofertas</a>
         </div>
         <div class="hero-features mt-5">
             <div class="hero-feature-item">
@@ -31,7 +33,7 @@
 </section>
 
 <div class="container-fluid mt-5 px-3 d-flex justify-content-center">
-    <form class="d-flex" method="get" action="{% url 'home' %}#todos-os-produtos" style="width: 600px;">
+    <form class="d-flex" method="get" action="#todos-os-produtos" style="width: 600px;">
         {% if selected_category %}
             <input type="hidden" name="category" value="{{ selected_category }}">
         {% endif %}
@@ -42,13 +44,13 @@
     </form>
 </div>
 
-<section class="container categories-section">
+<section id="categorias" class="container categories-section">
     <h2 class="section-title">Nossas Categorias</h2>
     <p class="section-subtitle">Encontre tudo que você precisa organizado por categorias</p>
     <div class="row justify-content-center g-4">
         {% for category in categories %}
         <div class="col-6 col-sm-4 col-md-2">
-            <a href="?category={{ category.name }}#todos-os-produtos" class="text-decoration-none">
+            <a href="?category={{ category.name }}#categorias" class="text-decoration-none">
                 <div class="card category-card {% if selected_category == category.name %}selected{% endif %}">
                     <div class="card-body text-center">
                         {% if category.name == "Mercearia" %}
@@ -83,7 +85,7 @@
         {% endfor %}
 
         <div class="col-6 col-sm-4 col-md-2">
-            <a href="{% url 'home' %}#produtos-em-destaque" class="text-decoration-none">
+            <a href="#todos-os-produtos" class="text-decoration-none">
                 <div class="card category-card {% if not selected_category %}selected{% endif %}">
                     <div class="card-body text-center">
                         <i class="bi bi-grid-3x3-gap-fill text-primary"></i>
@@ -231,6 +233,7 @@
         {% endfor %}
     </div>
 </section>
+
 <section class="container about-section" id="about">
     <div class="row align-items-center">
         <div class="col-lg-6 mb-4 mb-lg-0">
