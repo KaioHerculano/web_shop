@@ -6,6 +6,10 @@ Bem-vindo ao repositório oficial do **Web Shop**, um site de supermercado onlin
 
 O **Web Shop** tem como objetivo oferecer uma solução completa para compras online de supermercado, com uma interface simples, moderna e acessível. O projeto foi desenvolvido como parte de um estudo acadêmico de sistemas web com foco em usabilidade, performance e experiência do usuário.
 
+### 🔗 Integração com o Sales_Hub
+
+Este sistema é **totalmente integrado com o [Sales_Hub]**, um sistema de **gestão de estoque** também desenvolvido com Django. Através dessa integração, os produtos exibidos no Web Shop são sincronizados com o estoque gerenciado no Sales_Hub, garantindo consistência, controle de vendas e atualização automática de quantidades disponíveis.
+
 ## 🛠 Tecnologias Utilizadas
 
 - **Python 3.11**
@@ -21,7 +25,7 @@ O **Web Shop** tem como objetivo oferecer uma solução completa para compras on
 - Filtro de produtos por categoria
 - Carrinho de compras com total dinâmico
 - Envio de pedidos via WhatsApp
-- Autenticação de usuários responsaveis pelo site
+- Autenticação de usuários responsáveis pelo site
 - Layout responsivo para desktop e mobile
 - Painel administrativo para gerenciar produtos e pedidos
 
@@ -37,7 +41,7 @@ O **Web Shop** tem como objetivo oferecer uma solução completa para compras on
 ![Carrinho](screenshot/sobre.png)
 
 ### 📍 Rodapé
-![Carrinho](screenshot/footer.png)
+![Rodapé](screenshot/footer.png)
 
 ## 🚀 Como Executar Localmente
 
@@ -66,8 +70,6 @@ O **Web Shop** tem como objetivo oferecer uma solução completa para compras on
 
 5. Acesse: `http://127.0.0.1:8000`
 
-
 ## 🙋 Contribuindo
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
-
