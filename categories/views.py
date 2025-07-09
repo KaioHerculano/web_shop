@@ -25,7 +25,6 @@ class CategoryCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView
     permission_required = 'categories.add_category'
 
 
-
 class CategoryDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     model = models.Category
     template_name = 'category_detail.html'

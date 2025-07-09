@@ -1,6 +1,7 @@
 from products.models import Product
 from decimal import Decimal
 
+
 class Cart:
     def __init__(self, request):
         self.session = request.session

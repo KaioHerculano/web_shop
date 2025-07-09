@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib import messages
 import requests
 from . import models
@@ -40,6 +40,7 @@ class ProductListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
         return list(local_products) + api_products
 
+
 class ProductDetailView(View):
     def get(self, request, *args, **kwargs):
         if 'external_id' in kwargs:
@@ -49,7 +50,7 @@ class ProductDetailView(View):
         else:
             messages.error(request, "Produto não encontrado")
             return redirect('product_list')
-    
+
     def get_local_product(self, request, pk):
         try:
             product = models.Product.objects.get(pk=pk)
@@ -60,19 +61,19 @@ class ProductDetailView(View):
         except models.Product.DoesNotExist:
             messages.error(request, "Produto local não encontrado")
             return redirect('product_list')
-    
+
     def get_api_product(self, request, api_id):
         try:
             api_base_url = "http://127.0.0.1:5000"
             api_url = f'{api_base_url}/api/v1/public/products/1/{api_id}/'
-            
+
             response = requests.get(api_url, timeout=5)
             if response.status_code == 404:
                 messages.error(request, "Produto não encontrado na API")
                 return redirect('product_list')
             response.raise_for_status()
             product_data = response.json()
-            
+
             if 'photo' in product_data and product_data['photo']:
                 photo_url_from_api = product_data['photo']
                 if not photo_url_from_api.startswith('http') and not photo_url_from_api.startswith('/media/'):
@@ -88,6 +89,7 @@ class ProductDetailView(View):
             messages.error(request, f"Erro ao buscar produto na API: {str(e)}")
             return redirect('product_list')
 
+
 class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = models.Product
     form_class = ProductForm
@@ -95,12 +97,14 @@ class ProductCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView)
     success_url = reverse_lazy('product_list')
     permission_required = 'products.add_product'
 
+
 class ProductUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = models.Product
     form_class = ProductForm
     template_name = 'product_update.html'
     success_url = reverse_lazy('product_list')
     permission_required = 'products.change_product'
+
 
 class ProductDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = models.Product

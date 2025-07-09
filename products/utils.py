@@ -1,5 +1,6 @@
 import requests
 
+
 def fetch_external_products():
     url = "http://127.0.0.1:5000/api/v1/products/"
     try:

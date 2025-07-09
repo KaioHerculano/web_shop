@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Order(models.Model):
     PAYMENT_CHOICES = [
         ('credit_card', 'Cartão de Crédito'),

@@ -5,6 +5,7 @@ from django.contrib import messages
 import requests
 from decimal import Decimal
 
+
 class ProductData:
     def __init__(self, id, title, selling_price, photo=None, is_api=False, obj=None, company_id=None, discount_price=None, rating=0):
         self.id = id
@@ -15,12 +16,13 @@ class ProductData:
         self.obj = obj
         self.company_id = company_id
         self.discount_price = discount_price
-        
+
         if self.selling_price is not None and self.discount_price is not None and self.selling_price > Decimal('0'):
             self.discount_percentage = int(((self.selling_price - self.discount_price) / self.selling_price) * 100)
         else:
             self.discount_percentage = None
         self.rating = rating
+
 
 class CustomLoginView(LoginView):
     def form_valid(self, form):
@@ -48,6 +50,7 @@ class CustomLoginView(LoginView):
 
         return response
 
+
 class HomeView(TemplateView):
     template_name = 'home.html'
 
@@ -63,7 +66,7 @@ class HomeView(TemplateView):
             {'name': 'Congelados'}, {'name': 'Limpeza'}, {'name': 'Laticínios'},
             {'name': 'Padaria'}, {'name': 'Bebidas'}, {'name': 'Carnes'},
         ]
-        
+
         cheapest_products_list_raw = []
 
         products_for_offers_local_query = Product.objects.filter(quantity__gt=0)
@@ -71,7 +74,7 @@ class HomeView(TemplateView):
             products_for_offers_local_query = products_for_offers_local_query.filter(category__name__iexact=selected_category)
         if search_term:
             products_for_offers_local_query = products_for_offers_local_query.filter(title__icontains=search_term)
-        
+
         for product in products_for_offers_local_query:
             photo_url = product.photo.url if product.photo else None
             discount_price_local = getattr(product, 'discount_price', None)
@@ -89,7 +92,7 @@ class HomeView(TemplateView):
                     rating=rating_local,
                 )
             )
-        
+
         api_base_url = "http://127.0.0.1:5000"
         try:
             api_all_products_response = requests.get(
@@ -106,7 +109,7 @@ class HomeView(TemplateView):
             for product_item in api_all_product_list:
                 if product_item.get('quantity', 0) <= 0:
                     continue
-                
+
                 raw_photo = product_item.get('photo') or product_item.get('photo_url')
                 if raw_photo and not raw_photo.startswith('http'):
                     if raw_photo.startswith('/media/'):
@@ -116,7 +119,7 @@ class HomeView(TemplateView):
 
                 api_selling_price_raw = product_item.get('selling_price') or product_item.get('price')
                 api_selling_price = Decimal(str(api_selling_price_raw)) if api_selling_price_raw is not None else Decimal('0.00')
-                
+
                 api_discount_price_raw = product_item.get('discount_price')
                 api_discount_price = Decimal(str(api_discount_price_raw)) if api_discount_price_raw is not None else None
 
@@ -141,7 +144,7 @@ class HomeView(TemplateView):
             price_to_compare = product_data.discount_price
             if price_to_compare is None:
                 price_to_compare = product_data.selling_price
-            
+
             if not isinstance(price_to_compare, Decimal):
                 try:
                     price_to_compare = Decimal(str(price_to_compare))
@@ -158,12 +161,11 @@ class HomeView(TemplateView):
 
         context['cheapest_products'] = products_below_10_reais[:8]
 
-
         offered_product_ids = set()
         for p in context['cheapest_products']:
-            offered_product_ids.add((p.id, p.is_api)) 
+            offered_product_ids.add((p.id, p.is_api))
 
-        all_products_for_display = [] 
+        all_products_for_display = []
 
         products_from_db = Product.objects.filter(quantity__gt=0)
         if selected_category:
@@ -185,7 +187,6 @@ class HomeView(TemplateView):
             )
             if (product_data.id, product_data.is_api) not in offered_product_ids:
                 all_products_for_display.append(product_data)
-
 
         try:
             api_response_main = requests.get(
@@ -212,10 +213,10 @@ class HomeView(TemplateView):
 
                 api_selling_price_raw = product_item.get('selling_price') or product_item.get('price')
                 api_selling_price = Decimal(str(api_selling_price_raw)) if api_selling_price_raw is not None else Decimal('0.00')
-                
+
                 api_discount_price_raw = product_item.get('discount_price')
                 api_discount_price = Decimal(str(api_discount_price_raw)) if api_discount_price_raw is not None else None
-                
+
                 api_rating = product_item.get('rating', 0)
 
                 product_data = ProductData(
