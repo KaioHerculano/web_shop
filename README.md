@@ -29,20 +29,6 @@ Este sistema é **totalmente integrado com o [Sales_Hub]**, um sistema de **gest
 - Layout responsivo para desktop e mobile
 - Painel administrativo para gerenciar produtos e pedidos
 
-## 📷 Capturas de Tela
-
-### 🏠 Topo da página
-![Página Inicial](screenshot/topo.png)
-
-### 🛍 Lista de Categorias
-![Lista de Produtos](screenshot/categorias.png)
-
-### 🛒 Sobre
-![Carrinho](screenshot/sobre.png)
-
-### 📍 Rodapé
-![Rodapé](screenshot/footer.png)
-
 ## 🚀 Como Executar Localmente
 
 1. Clone o repositório:
@@ -69,6 +55,32 @@ Este sistema é **totalmente integrado com o [Sales_Hub]**, um sistema de **gest
    ```
 
 5. Acesse: `http://127.0.0.1:8000`
+
+## 📷 Capturas de Tela
+
+### Topo da página
+![Página Inicial](screenshot/topo.png)
+
+### Lista de Categorias
+![Lista de Produtos](screenshot/categorias.png)
+
+### Produtos
+![Rodapé](screenshot/produtos.png)
+
+### Ofertas
+![Rodapé](screenshot/ofertas.png)
+
+### Carrinho de Compras
+![Rodapé](screenshot/carrinho.png)
+
+### Finalizar Pedido
+![Rodapé](screenshot/finalizar_pedido.png)
+
+### Sobre
+![Carrinho](screenshot/sobre.png)
+
+### Rodapé
+![Rodapé](screenshot/footer.png)
 
 ## 🙋 Contribuindo
 
