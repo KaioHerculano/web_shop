@@ -26,7 +26,7 @@ Este sistema é **totalmente integrado com o [Sales_Hub]**, um sistema de **gest
 - Carrinho de compras com total dinâmico
 - Envio de pedidos via WhatsApp
 - Autenticação de usuários responsáveis pelo site
-- Layout responsivo para desktop e mobile
+- Layout responsivo para desktop e smartphones
 - Painel administrativo para gerenciar produtos e pedidos
 
 ## 🚀 Como Executar Localmente
