@@ -23,4 +23,4 @@ omit =
 # Mostra as linhas que não foram cobertas
 show_missing = True
 # No relatório do console, não mostra arquivos com 100% de cobertura
-skip_covered = True
+skip_covered = False
