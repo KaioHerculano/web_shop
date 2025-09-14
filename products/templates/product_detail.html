@@ -145,15 +145,15 @@
                         <a href="{% url 'home' %}" class="btn btn-secondary icon-btn" title="Voltar">
                             <i class="bi bi-arrow-left"></i>
                         </a>
-                        
+
                         {% if not is_external and perms.products.change_product %}
-                          <a href="{% url 'product_update' pk=product.id %}" 
+                          <a href="{% url 'product_update' pk=product.id %}"
                              class="btn btn-warning icon-btn" title="Editar">
                               <i class="bi bi-pencil"></i>
                           </a>
                         {% endif %}
-                        
-                        <form action="{% if is_external %}{% url 'add_api_product_to_cart' product.id %}{% else %}{% url 'add_to_cart' product.id %}{% endif %}" 
+
+                        <form action="{% if is_external %}{% url 'add_api_product_to_cart' product.id %}{% else %}{% url 'add_to_cart' product.id %}{% endif %}"
                               method="post" class="m-0 p-0">
                             {% csrf_token %}
                             <input type="hidden" name="quantity" value="1">

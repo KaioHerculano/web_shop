@@ -9,11 +9,11 @@
 <body class="d-flex align-items-center justify-content-center vh-100 bg-light">
 <div class="card p-4 shadow" style="min-width: 300px; max-width: 400px; width: 100%;">
     <h4 class="mb-3 text-center">Login para Administradores</h4>
-    
+
     {% if form.errors %}
         <div class="alert alert-danger">Usuário ou senha inválidos.</div>
     {% endif %}
-    
+
     <form method="post" novalidate>
         {% csrf_token %}
         <div class="mb-3">

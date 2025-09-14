@@ -37,18 +37,18 @@
                     <td>
                         {% if product.is_external %}
                             <!-- Produtos API - corrigido para usar api_id -->
-                            <a href="{% url 'product_detail_api' external_id=product.api_id %}" 
+                            <a href="{% url 'product_detail_api' external_id=product.api_id %}"
                                class="btn btn-info btn-sm bi bi-search"></a>
                         {% else %}
                             <!-- Produtos locais -->
-                            <a href="{% url 'product_detail' pk=product.id %}" 
+                            <a href="{% url 'product_detail' pk=product.id %}"
                                class="btn btn-info btn-sm bi bi-search"></a>
                             {% if perms.products.change_product %}
-                                <a href="{% url 'product_update' pk=product.id %}" 
+                                <a href="{% url 'product_update' pk=product.id %}"
                                    class="btn btn-warning btn-sm bi bi-pencil"></a>
                             {% endif %}
                             {% if perms.products.delete_product %}
-                                <a href="{% url 'product_delete' pk=product.id %}" 
+                                <a href="{% url 'product_delete' pk=product.id %}"
                                    class="btn btn-danger btn-sm bi bi-trash"></a>
                             {% endif %}
                         {% endif %}

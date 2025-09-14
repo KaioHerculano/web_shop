@@ -1,0 +1,26 @@
+[run]
+# Lista exatamente quais pastas de apps devem ser analisadas
+source =
+    app
+    brands
+    cart
+    categories
+    orders
+    products
+
+# Lista de padrões de arquivos a serem omitidos
+omit =
+    */migrations/*
+    */tests/*
+    */admin.py
+    */apps.py
+    manage.py
+    app/settings.py
+    app/wsgi.py
+    app/asgi.py
+
+[report]
+# Mostra as linhas que não foram cobertas
+show_missing = True
+# No relatório do console, não mostra arquivos com 100% de cobertura
+skip_covered = True

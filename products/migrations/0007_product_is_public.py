@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0006_product_external_id'),
+        ("products", "0006_product_external_id"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='is_public',
-            field=models.BooleanField(default=True, help_text='Se este produto deve ser exibido para clientes sem login', verbose_name='Visível publicamente?'),
+            model_name="product",
+            name="is_public",
+            field=models.BooleanField(
+                default=True,
+                help_text="Se este produto deve ser exibido para clientes sem login",
+                verbose_name="Visível publicamente?",
+            ),
         ),
     ]

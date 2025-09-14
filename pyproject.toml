@@ -1,0 +1,34 @@
+# --- Configuração do Black (Formatador) ---
+[tool.black]
+line-length = 99
+# 'extend-exclude' adiciona exceções à lista padrão do Black
+extend-exclude = '''
+# Exclui arquivos de migração, que são gerados automaticamente
+/(migrations)/
+'''
+
+
+# --- Configuração do Ruff (Linter, substituto do Flake8) ---
+[tool.ruff]
+line-length = 99
+# 'select' ativa um conjunto de regras. Estas são um ótimo ponto de partida.
+# F = Pyflakes, E/W = Pycodestyle, I = isort
+select = ["E", "W", "F", "I"]
+
+# 'ignore' permite desativar regras específicas se elas forem muito restritivas
+# Exemplo: ignore = ["E501"] # Desativaria o erro de linha muito longa
+
+# 'exclude' diz ao Ruff para ignorar completamente certos arquivos e pastas
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "migrations",
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint.isort]
+# Garante que a ordenação de imports do Ruff é compatível com o Black
+known_django = ["django"]
+known_first_party = ["app", "brands", "cart", "categories", "orders", "products"]

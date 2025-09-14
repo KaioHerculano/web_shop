@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0005_alter_product_photo'),
+        ("products", "0005_alter_product_photo"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='external_id',
+            model_name="product",
+            name="external_id",
             field=models.IntegerField(blank=True, null=True, unique=True),
         ),
     ]

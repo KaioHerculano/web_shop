@@ -3,11 +3,11 @@ from django.db import models
 
 class Order(models.Model):
     PAYMENT_CHOICES = [
-        ('credit_card', 'Cartão de Crédito'),
-        ('debit_card', 'Cartão de Débito'),
-        ('pix', 'PIX'),
-        ('boleto', 'Boleto'),
-        ('cash', 'Dinheiro'),
+        ("credit_card", "Cartão de Crédito"),
+        ("debit_card", "Cartão de Débito"),
+        ("pix", "PIX"),
+        ("boleto", "Boleto"),
+        ("cash", "Dinheiro"),
     ]
 
     customer_name = models.CharField(max_length=100)
@@ -17,4 +17,4 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Pedido {self.id} - {self.customer_name}'
+        return f"Pedido {self.id} - {self.customer_name}"
