@@ -1,4 +1,5 @@
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect, render
@@ -29,7 +30,9 @@ class ProductListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         if token:
             try:
                 headers = {"Authorization": f"Bearer {token}"}
-                response = requests.get("http://127.0.0.1:5000/api/v1/products/", headers=headers)
+                response = requests.get(
+                    f"{settings.EXTERNAL_API_BASE_URL}/api/v1/products/", headers=headers
+                )
                 if response.status_code == 200:
                     data = response.json()
                     for item in data:
@@ -64,7 +67,7 @@ class ProductDetailView(View):
 
     def get_api_product(self, request, api_id):
         try:
-            api_base_url = "http://127.0.0.1:5000"
+            api_base_url = settings.EXTERNAL_API_BASE_URL
             api_url = f"{api_base_url}/api/v1/public/products/1/{api_id}/"
 
             response = requests.get(api_url, timeout=5)

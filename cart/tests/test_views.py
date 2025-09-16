@@ -1,6 +1,7 @@
 from unittest.mock import Mock, patch
 
 import requests
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
@@ -37,30 +38,23 @@ class CartViewsTest(TestCase):
     @patch("cart.views.requests.get")
     def test_add_api_product_view_success(self, mock_requests_get):
         """Testa a view que adiciona produto da API, simulando uma resposta de sucesso."""
-        # 1. Configuramos o mock para simular a resposta da API
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = self.api_product_data
         mock_requests_get.return_value = mock_response
 
-        # 2. Chamamos a view
         response = self.client.post(self.add_api_url, {"quantity": 1})
 
-        # 3. Verificamos os resultados
         self.assertEqual(response.status_code, 302)
         api_product_key = f"api-{self.api_product_data['id']}"
         self.assertEqual(self.client.session["cart"][api_product_key]["quantity"], 1)
 
-        # 4. Verificamos se a chamada de rede foi feita como esperado
-        expected_api_url = (
-            f"http://127.0.0.1:5000/api/v1/public/products/1/{self.api_product_data['id']}/"
-        )
+        expected_api_url = f"{settings.EXTERNAL_API_BASE_URL}/api/v1/public/products/1/{self.api_product_data['id']}/"
         mock_requests_get.assert_called_once_with(expected_api_url, timeout=5)
 
     @patch("cart.views.requests.get")
     def test_add_api_product_view_failure(self, mock_requests_get):
         """Testa a view que adiciona produto da API, simulando uma falha de rede."""
-        # Configuramos o mock para simular um erro
         mock_requests_get.side_effect = requests.exceptions.RequestException("API fora do ar")
 
         response = self.client.post(self.add_api_url, {"quantity": 1})

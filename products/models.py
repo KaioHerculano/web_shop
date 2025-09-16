@@ -13,6 +13,7 @@ class Product(models.Model):
     quantity = models.IntegerField(default=0)
     serie_number = models.CharField(max_length=300)
     selling_price = models.DecimalField(max_digits=10, decimal_places=2)
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     photo = models.ImageField(upload_to="products_photos/", blank=True, null=True)
 
