@@ -41,10 +41,9 @@ class CartLogicTest(TestCase):
         self.assertIn(expected_key, cart.cart)
         self.assertEqual(cart.cart[expected_key]["quantity"], 1)
 
-    def test_update_and_remove_products(self):
+    def test_remove_product(self):
         cart = Cart(self.request)
         cart.add(product_id=self.local_product.id, quantity=1)
-        # Remove
         cart.remove(product_id=self.local_product.id, product_type="local")
         self.assertNotIn(f"local-{self.local_product.id}", cart.cart)
 
@@ -58,16 +57,6 @@ class CartLogicTest(TestCase):
         cart = Cart(self.request)
         self.assertEqual(cart.cart, {})
 
-    def test_items_method_handles_malformed_session_data(self):
-        session = self.client.session
-        session["cart"] = {
-            f"local-{self.local_product.id}": {"quantity": 1, "type": "local"},
-            "dado_invalido": "isto nao e um dicionario",
-        }
-        session.save()
-        cart = Cart(self.request)
-        self.assertEqual(len(cart.items()), 0)
-
     def test_total_and_items_on_empty_cart(self):
         cart = Cart(self.request)
         self.assertEqual(cart.total(), Decimal("0"))
@@ -78,3 +67,55 @@ class CartLogicTest(TestCase):
         cart.add(product_id=self.local_product.id, quantity=5)
         cart.clear()
         self.assertEqual(cart.cart, {})
+
+    def test_add_existing_local_product_updates_quantity(self):
+        """Testa se adicionar um produto local existente apenas incrementa a quantidade (linha 21)."""
+        cart = Cart(self.request)
+        cart.add(product_id=self.local_product.id, quantity=1)
+        cart.add(product_id=self.local_product.id, quantity=2)
+        expected_key = f"local-{self.local_product.id}"
+        self.assertEqual(cart.cart[expected_key]["quantity"], 3)
+
+    def test_add_existing_api_product_updates_quantity(self):
+        """Testa se adicionar um produto da API existente apenas incrementa a quantidade (linha 30)."""
+        cart = Cart(self.request)
+        cart.add_api_product(self.api_product_data, quantity=2)
+        cart.add_api_product(self.api_product_data, quantity=3)
+        expected_key = f"api-{self.api_product_data['id']}"
+        self.assertEqual(cart.cart[expected_key]["quantity"], 5)
+
+    def test_update_product_quantity(self):
+        """Testa a atualização da quantidade de um item no carrinho (linhas 42-45)."""
+        cart = Cart(self.request)
+        cart.add(product_id=self.local_product.id, quantity=1)
+        cart.update(product_id=self.local_product.id, quantity=10, product_type="local")
+        expected_key = f"local-{self.local_product.id}"
+        self.assertEqual(cart.cart[expected_key]["quantity"], 10)
+
+    def test_items_handles_item_value_not_a_dict(self):
+        """Testa o fallback quando um item no carrinho não é um dicionário (linha 74)."""
+        self.request.session["cart"] = {"item_corrompido": "nao sou um dicionario"}
+        self.request.session.save()
+        cart = Cart(self.request)
+        items = cart.items()
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["type"], "invalid")
+        self.assertEqual(items[0]["product"]["title"], "Invalid item")
+
+    def test_items_handles_malformed_api_price(self):
+        """Testa o fallback quando um item da API tem um preço inválido (linhas 101-103)."""
+        key = f"api-{self.api_product_data['id']}"
+        self.request.session["cart"] = {
+            key: {
+                "quantity": 1,
+                "type": "api",
+                "title": "Produto com preço ruim",
+                "price": "um_preco_invalido",
+            }
+        }
+        self.request.session.save()
+        cart = Cart(self.request)
+        items = cart.items()
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]["type"], "invalid")
+        self.assertEqual(items[0]["product"]["id"], key)
