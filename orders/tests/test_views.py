@@ -1,4 +1,5 @@
-# orders/tests/test_views.py
+import urllib.parse
+
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
@@ -74,3 +75,54 @@ class FinalizeOrderViewTest(TestCase):
         # Pedido ainda é criado mesmo sem produtos
         order = Order.objects.first()
         self.assertIsNotNone(order)
+
+    def test_finalize_order_get_request_loads_page(self):
+        """Testa se uma requisição GET para a view carrega a página corretamente."""
+        url = reverse("finalize_order")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "finalize_order.html")
+
+        # Verifica se o contexto foi populado corretamente
+        self.assertIn("cart_items", response.context)
+        self.assertIn("total", response.context)
+        self.assertIsNotNone(response.context["form"])
+
+    def test_finalize_order_with_api_product(self):
+        """Testa a finalização de um pedido contendo um produto da API."""
+        # Adiciona um produto da API ao carrinho
+        session = self.client.session
+        session["cart"] = {
+            "api-123": {
+                "quantity": 3,
+                "type": "api",
+                "title": "Produto da API Teste",
+                "price": 50.0,
+            }
+        }
+        session.save()
+
+        url = reverse("finalize_order")
+        form_data = {
+            "customer_name": "Cliente API",
+            "address": "Rua API, 456",
+            "phone": "11888888888",
+            "payment_method": "credit_card",
+        }
+
+        response = self.client.post(url, data=form_data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("https://wa.me/", response.url)
+
+        # Decodifica a URL para verificar se o produto da API está na mensagem
+        redirect_url = response.url
+        parsed_url = urllib.parse.urlparse(redirect_url)
+        query_params = urllib.parse.parse_qs(parsed_url.query)
+        message = query_params.get("text", [""])[0]
+
+        self.assertIn("Produto da API Teste (x3)", message)
+
+        # Verifica se o pedido foi criado
+        self.assertTrue(Order.objects.filter(customer_name="Cliente API").exists())
