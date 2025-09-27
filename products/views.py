@@ -51,7 +51,7 @@ class ProductDetailView(View):
             return self.get_api_product(request, kwargs["external_id"])
         elif "pk" in kwargs:
             return self.get_local_product(request, kwargs["pk"])
-        else:
+        else:  # pragma: no cover
             messages.error(request, "Produto não encontrado")
             return redirect("product_list")
 
