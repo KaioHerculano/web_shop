@@ -53,8 +53,8 @@ O projeto é totalmente containerizado com Docker, garantindo um ambiente de des
 ### 2. Clonar o Repositório
 
 ```bash
-git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
-cd seu-repositorio
+git clone https://github.com/KaioHerculano/web_shop.git
+cd web_shop
 ```
 
 ### 3. Configuração do Ambiente
