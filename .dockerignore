@@ -1,0 +1,35 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Ambiente Virtual
+venv/
+.venv/
+
+# Arquivos de configuração de IDE e S.O.
+.vscode/
+.idea/
+*.pyc
+__pycache__/
+.DS_Store
+
+# Banco de dados local (não deve ir para a imagem)
+db.sqlite3
+
+# Arquivos de ambiente (segredos)
+.env
+.env.example
+
+# Arquivos de mídia e estáticos locais (serão gerenciados por volumes ou coletados)
+media/
+staticfiles/
+
+# Arquivos de teste e cobertura
+.coverage
+.coveragerc
+pytest.ini
