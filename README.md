@@ -150,7 +150,3 @@ O projeto utiliza um template de Pull Request para garantir que as contribuiçõ
 
 ### Rodapé
 ![Rodapé](screenshot/footer.png)
-
-## 🙋 Contribuindo
-
-Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
