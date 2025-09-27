@@ -50,7 +50,7 @@
     <div class="row justify-content-center g-4">
         {% for category in categories %}
         <div class="col-6 col-sm-4 col-md-2">
-            <a href="?category={{ category.name }}#todos-os-produtos" class="text-decoration-none">
+            <a href="?category={{ category.name }}{% if query %}&q={{ query }}{% endif %}#todos-os-produtos" class="text-decoration-none">
                 <div class="card category-card {% if selected_category == category.name %}selected{% endif %}">
                     <div class="card-body text-center">
                         {% if category.name == "Mercearia" %}
@@ -77,15 +77,16 @@
                             <i class="bi bi-tag text-secondary"></i>
                         {% endif %}
                         <h6 class="mt-2 mb-0">{{ category.name }}</h6>
-                        <p>{{ category.product_count}}+ produtos</p>
+                        <p>{{ category.product_count }}+ produtos</p>
                     </div>
                 </div>
             </a>
         </div>
         {% endfor %}
 
+        {# Botão "Todos" limpa o filtro de categoria, mas mantém a pesquisa #}
         <div class="col-6 col-sm-4 col-md-2">
-            <a href="#todos-os-produtos" class="text-decoration-none">
+            <a href="{% url 'home' %}{% if query %}?q={{ query }}{% endif %}#todos-os-produtos" class="text-decoration-none">
                 <div class="card category-card {% if not selected_category %}selected{% endif %}">
                     <div class="card-body text-center">
                         <i class="bi bi-grid-3x3-gap-fill text-primary"></i>
@@ -108,17 +109,13 @@
                 {% if product.discount_percentage %}
                     <span class="discount-tag">-{{ product.discount_percentage }}% OFF</span>
                 {% endif %}
-
                 {% if product.photo %}
-                    <img src="{{ product.photo }}"
-                         class="card-img-top product-image"
-                         alt="{{ product.title }}">
+                    <img src="{{ product.photo }}" class="card-img-top product-image" alt="{{ product.title }}">
                 {% else %}
                     <div class="product-placeholder">
                         <i class="bi bi-image"></i>
                     </div>
                 {% endif %}
-
                 <div class="card-body product-card-body">
                     <h5 class="card-title product-title" title="{{ product.title }}">{{ product.title }}</h5>
                     <div class="product-rating">
@@ -138,21 +135,9 @@
                         <p class="card-text product-price-discount">R$ {{ product.selling_price|floatformat:2 }}</p>
                     {% endif %}
                 </div>
-
                 <div class="card-footer product-card-footer">
-                    <a href="{% if product.is_api %}
-                                 {% url 'product_detail_api' external_id=product.id %}
-                             {% else %}
-                                 {% url 'product_detail' pk=product.id %}
-                             {% endif %}"
-                       class="btn btn-primary w-100">Ver Detalhes</a>
-
-                    <form action="{% if product.is_api %}
-                                     {% url 'add_api_product_to_cart' product_id=product.id %}
-                                 {% else %}
-                                     {% url 'add_to_cart' product.id %}
-                                 {% endif %}"
-                          method="post" class="w-100">
+                    <a href="{% if product.is_api %}{% url 'product_detail_api' external_id=product.id %}{% else %}{% url 'product_detail' pk=product.id %}{% endif %}" class="btn btn-primary w-100">Ver Detalhes</a>
+                    <form action="{% if product.is_api %}{% url 'add_api_product_to_cart' product_id=product.id %}{% else %}{% url 'add_to_cart' product.id %}{% endif %}" method="post" class="w-100">
                         {% csrf_token %}
                         <input type="hidden" name="quantity" value="1">
                         <button type="submit" class="btn btn-success w-100">Adicionar ao Carrinho</button>
@@ -176,17 +161,13 @@
                 {% if product.discount_percentage %}
                     <span class="discount-tag">-{{ product.discount_percentage }}% OFF</span>
                 {% endif %}
-
                 {% if product.photo %}
-                    <img src="{{ product.photo }}"
-                         class="card-img-top product-image"
-                         alt="{{ product.title }}">
+                    <img src="{{ product.photo }}" class="card-img-top product-image" alt="{{ product.title }}">
                 {% else %}
                     <div class="product-placeholder">
                         <i class="bi bi-image"></i>
                     </div>
                 {% endif %}
-
                 <div class="card-body product-card-body">
                     <h5 class="card-title product-title" title="{{ product.title }}">{{ product.title }}</h5>
                     <div class="product-rating">
@@ -206,21 +187,9 @@
                         <p class="card-text product-price-discount">R$ {{ product.selling_price|floatformat:2 }}</p>
                     {% endif %}
                 </div>
-
                 <div class="card-footer product-card-footer">
-                    <a href="{% if product.is_api %}
-                                 {% url 'product_detail_api' external_id=product.id %}
-                             {% else %}
-                                 {% url 'product_detail' pk=product.id %}
-                             {% endif %}"
-                       class="btn btn-primary w-100">Ver Detalhes</a>
-
-                    <form action="{% if product.is_api %}
-                                     {% url 'add_api_product_to_cart' product_id=product.id %}
-                                 {% else %}
-                                     {% url 'add_to_cart' product.id %}
-                                 {% endif %}"
-                          method="post" class="w-100">
+                    <a href="{% if product.is_api %}{% url 'product_detail_api' external_id=product.id %}{% else %}{% url 'product_detail' pk=product.id %}{% endif %}" class="btn btn-primary w-100">Ver Detalhes</a>
+                    <form action="{% if product.is_api %}{% url 'add_api_product_to_cart' product_id=product.id %}{% else %}{% url 'add_to_cart' product.id %}{% endif %}" method="post" class="w-100">
                         {% csrf_token %}
                         <input type="hidden" name="quantity" value="1">
                         <button type="submit" class="btn btn-success w-100">Adicionar ao Carrinho</button>
