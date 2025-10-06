@@ -7,7 +7,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,11 +27,4 @@ jobs:
       - name: Run tests with coverage
         env:
           SECRET_KEY: "dummy-key-for-ci"
-          SQL_DATABASE: "dummy_db"
-          SQL_USER: "dummy_user"
-          SQL_PASSWORD: "dummy_password"
-          SQL_HOST: "dummy_host"
-          SQL_PORT: "1234"
-          MERCHANT_WHATSAPP_NUMBER: "5511999999999"
-          EXTERNAL_API_BASE_URL: "https://api.exemplo.com"
         run: make test-coverage
