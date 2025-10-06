@@ -27,4 +27,6 @@ jobs:
       - name: Run tests with coverage
         env:
           SECRET_KEY: "dummy-key-for-ci"
+          EXTERNAL_API_BASE_URL: "https://api-de-teste.com"
+          MERCHANT_WHATSAPP_NUMBER: "5511999999999"
         run: make test-coverage
