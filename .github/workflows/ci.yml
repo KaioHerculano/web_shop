@@ -26,4 +26,6 @@ jobs:
         run: make pre-commit
 
       - name: Run tests with coverage
+        env:
+          SECRET_KEY: "a-dummy-secret-key-for-ci-tests-that-is-not-secret"
         run: make test-coverage
