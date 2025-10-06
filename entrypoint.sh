@@ -1,3 +1,5 @@
+#!/bin/sh
+
 echo "Waiting for db..."
 until nc -z db 5432; do
   sleep 1
