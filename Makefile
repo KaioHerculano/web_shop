@@ -9,7 +9,7 @@
 # ------------------------------------------------------------------------------
 
 # --- ⚙️ Configuração ---
-PYTHON = ./venv/Scripts/python
+PYTHON = python
 MANAGE = $(PYTHON) manage.py
 REQUIREMENTS = requirements.txt
 # Defina um valor razoável para a cobertura mínima de testes (ex: 85, 90, 100)
